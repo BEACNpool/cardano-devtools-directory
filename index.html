@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cardano Developer Tools Directory</title>
+<meta name="description" content="A curated, searchable directory of every actively maintained developer tool in the Cardano ecosystem." />
+<meta property="og:title" content="Cardano Developer Tools Directory" />
+<meta property="og:description" content="Community-maintained directory of Cardano developer tools, libraries, and infrastructure." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://beacnpool.github.io/cardano-devtools-directory/" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0e17; --surface: rgba(255,255,255,0.02); --border: rgba(255,255,255,0.06);
+    --text: #e2e8f0; --muted: #94a3b8; --dim: #64748b; --faint: #475569; --ghost: #1e293b;
+    --accent: #00d4aa; --accent-dim: rgba(0,212,170,0.15); --accent-border: rgba(0,212,170,0.3);
+    --blue: #0033ad; --mono: 'JetBrains Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.6; overflow-x: hidden; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,212,170,0.2); border-radius: 3px; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes gridPulse { 0%,100% { opacity: 0.03; } 50% { opacity: 0.06; } }
+  @keyframes heroGlow { 0%,100% { opacity: 0.25; } 50% { opacity: 0.5; } }
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: linear-gradient(rgba(0,212,170,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,170,0.03) 1px, transparent 1px);
+    background-size: 60px 60px; animation: gridPulse 8s ease-in-out infinite;
+  }
+  .bg-glow {
+    position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 600px; z-index: 0; pointer-events: none;
+    background: radial-gradient(ellipse, rgba(0,51,173,0.15) 0%, transparent 70%);
+    animation: heroGlow 6s ease-in-out infinite;
+  }
+  .content { position: relative; z-index: 1; }
+  .header {
+    border-bottom: 1px solid var(--border); padding: 14px 28px;
+    display: flex; justify-content: space-between; align-items: center;
+    backdrop-filter: blur(20px); background: rgba(10,14,23,0.85);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
+  .header-logo {
+    width: 30px; height: 30px; border-radius: 7px;
+    background: linear-gradient(135deg, var(--accent), var(--blue));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700; color: #fff; font-family: var(--mono);
+  }
+  .header-name { font-family: var(--mono); font-weight: 600; font-size: 13px; letter-spacing: -0.02em; }
+  .gh-link {
+    display: flex; align-items: center; gap: 6px; color: var(--muted); text-decoration: none;
+    font-size: 12px; font-family: var(--sans); padding: 5px 12px; border-radius: 7px;
+    border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s;
+  }
+  .gh-link:hover { border-color: var(--accent-border); color: var(--accent); }
+  .hero { padding: 70px 28px 50px; max-width: 1200px; margin: 0 auto; text-align: center; animation: fadeIn 0.6s ease both; }
+  .badge {
+    display: inline-block; padding: 3px 14px; border-radius: 20px;
+    background: var(--accent-dim); border: 1px solid rgba(0,212,170,0.2);
+    font-size: 11px; color: var(--accent); margin-bottom: 22px; font-family: var(--mono);
+  }
+  .hero h1 { font-size: clamp(30px, 5vw, 52px); font-weight: 700; font-family: var(--mono); line-height: 1.1; margin-bottom: 14px; letter-spacing: -0.04em; }
+  .hero h1 .grad { background: linear-gradient(135deg, #00d4aa 0%, #0066ff 50%, #00d4aa 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { font-size: 15px; color: var(--dim); max-width: 560px; margin: 0 auto 36px; line-height: 1.7; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; max-width: 560px; margin: 0 auto 36px; }
+  .stat { text-align: center; padding: 14px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 9px; }
+  .stat-val { font-size: 26px; font-weight: 700; font-family: var(--mono); background: linear-gradient(135deg, var(--accent), var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .stat-label { font-size: 10px; color: var(--dim); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.1em; }
+  .search-wrap { max-width: 520px; margin: 0 auto; position: relative; }
+  .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--faint); }
+  .search-input {
+    width: 100%; padding: 13px 14px 13px 40px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px; font-size: 13px;
+    color: var(--text); font-family: var(--sans); transition: all 0.3s ease;
+  }
+  .search-input::placeholder { color: var(--faint); }
+  .search-input:focus { outline: none; border-color: rgba(0,212,170,0.5); box-shadow: 0 0 0 3px rgba(0,212,170,0.1); }
+  .filters { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-bottom: 12px; }
+  .lang-filters { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-bottom: 28px; }
+  .fbtn {
+    padding: 5px 12px; border-radius: 7px; font-size: 11px; font-family: var(--mono);
+    background: var(--surface); color: var(--dim); border: 1px solid var(--border);
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .fbtn:hover { background: var(--accent-dim); color: var(--accent); }
+  .fbtn.active { background: var(--accent-dim); color: var(--accent); border-color: var(--accent-border); }
+  .lbtn {
+    padding: 3px 9px; border-radius: 5px; font-size: 10px; font-family: var(--mono);
+    background: transparent; color: var(--faint); border: 1px solid transparent;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .lbtn:hover { color: var(--muted); }
+  .lbtn.active { border-color: currentColor; }
+  .result-count { font-size: 11px; color: var(--faint); font-family: var(--mono); text-align: center; margin-bottom: 18px; }
+  .main { max-width: 1200px; margin: 0 auto; padding: 0 28px 70px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 10px; }
+  .card {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 11px;
+    padding: 18px; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); position: relative; overflow: hidden;
+  }
+  .card:hover { background: linear-gradient(135deg, rgba(0,212,170,0.06) 0%, rgba(0,51,173,0.06) 100%); border-color: rgba(0,212,170,0.35); transform: translateY(-2px); }
+  .card:hover .card-name { color: var(--accent); }
+  .card:hover .card-arrow { color: var(--accent); }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px; }
+  .card-name { font-size: 14px; font-weight: 600; font-family: var(--mono); letter-spacing: -0.02em; transition: color 0.3s; color: var(--text); }
+  .lang-tag { font-size: 9px; padding: 2px 7px; border-radius: 16px; font-family: var(--mono); font-weight: 500; white-space: nowrap; flex-shrink: 0; }
+  .card-desc { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+  .card-bottom { font-size: 10px; color: var(--faint); display: flex; justify-content: space-between; align-items: center; }
+  .card-arrow { transition: color 0.3s; }
+  .empty { text-align: center; padding: 70px 0; color: var(--faint); }
+  .empty-icon { font-size: 44px; margin-bottom: 14px; opacity: 0.4; }
+  .footer { border-top: 1px solid var(--border); padding: 36px 28px; text-align: center; }
+  .footer-brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; }
+  .footer-pfp { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--accent-border); }
+  .footer-name { font-family: var(--mono); font-size: 12px; font-weight: 600; }
+  .footer-sub { font-size: 10px; color: var(--dim); }
+  .footer p { font-size: 11px; color: var(--faint); max-width: 460px; margin: 0 auto 16px; line-height: 1.6; }
+  .footer-links { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .footer-links a { font-size: 11px; text-decoration: none; font-family: var(--mono); }
+  .footer-links a.primary { color: var(--accent); }
+  .footer-links a.secondary { color: var(--dim); }
+  .footer-ts { margin-top: 20px; font-size: 10px; color: var(--ghost); font-family: var(--mono); }
+  @media (max-width: 640px) {
+    .header { padding: 12px 16px; }
+    .hero { padding: 50px 16px 36px; }
+    .main { padding: 0 16px 50px; }
+    .grid { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="content" id="app"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script>
+var e=React.createElement,useState=React.useState;
+var TOOLS=[
+{n:"cardano-node",c:"Node Implementations",l:"Haskell",r:"https://github.com/IntersectMBO/cardano-node",d:"Reference node implementation (IOG)",o:"IntersectMBO"},
+{n:"Amaru",c:"Node Implementations",l:"Rust",r:"https://github.com/pragma-org/amaru",d:"Alternative node client by Pragma (exploratory phase)",o:"Pragma"},
+{n:"Dolos",c:"Node Implementations",l:"Rust",r:"https://github.com/txpipe/dolos",d:"Lightweight data node for read-only chain following",o:"TxPipe"},
+{n:"Dingo",c:"Node Implementations",l:"Go",r:"https://github.com/blinklabs-io/dingo",d:"Go-based node using Ouroboros N2N mini-protocols",o:"Blink Labs"},
+{n:"cardano-cli",c:"CLI & Node Tooling",l:"Haskell",r:"https://github.com/IntersectMBO/cardano-cli",d:"Official CLI for node interaction, tx building, governance",o:"IntersectMBO"},
+{n:"CNCLI",c:"CLI & Node Tooling",l:"Rust",r:"https://github.com/cardano-community/cncli",d:"Community node CLI \u2014 leader logs, pool stats, sendtip",o:"Community"},
+{n:"CShell",c:"CLI & Node Tooling",l:"Rust",r:"https://github.com/txpipe/cshell",d:"Developer/power-user wallet CLI",o:"TxPipe"},
+{n:"Cardano HW CLI",c:"CLI & Node Tooling",l:"TypeScript",r:"https://github.com/vacuumlabs/cardano-hw-cli",d:"Hardware wallet integration for cardano-cli",o:"Vacuumlabs"},
+{n:"SPO Scripts",c:"CLI & Node Tooling",l:"Bash",r:"https://github.com/gitmachtl/scripts",d:"Comprehensive SPO management scripts with HW wallet support",o:"Martin Lang"},
+{n:"cardano-ledger",c:"Ledger & Specs",l:"Haskell",r:"https://github.com/IntersectMBO/cardano-ledger",d:"Formal specs, executable models, and ledger implementation",o:"IntersectMBO"},
+{n:"plutus",c:"Ledger & Specs",l:"Haskell",r:"https://github.com/IntersectMBO/plutus",d:"Plutus Core compiler and language implementation",o:"IntersectMBO"},
+{n:"Guild Operators",c:"SPO Tooling",l:"Bash",r:"https://github.com/cardano-community/guild-operators",d:"CNTools, gLiveView, topology updater \u2014 essential SPO toolkit",o:"Community"},
+{n:"Aiken",c:"Smart Contracts",l:"Rust/Aiken",r:"https://github.com/aiken-lang/aiken",d:"Purpose-built smart contract language (compiles to UPLC)",o:"Pragma"},
+{n:"Helios",c:"Smart Contracts",l:"JavaScript",r:"https://github.com/hyperion-bt/helios",d:"JS-based smart contract language for Cardano",o:"Community"},
+{n:"Marlowe",c:"Smart Contracts",l:"Haskell",r:"https://github.com/marlowe-lang/marlowe-cardano",d:"DSL + runtime for financial smart contracts on Cardano",o:"Marlowe"},
+{n:"Opshin",c:"Smart Contracts",l:"Python",r:"https://github.com/OpShin/opshin",d:"Write Cardano smart contracts in Python",o:"OpShin"},
+{n:"Plutarch",c:"Smart Contracts",l:"Haskell",r:"https://github.com/Plutonomicon/plutarch-plutus",d:"Typed eDSL for writing Plutus scripts in Haskell",o:"Plutonomicon"},
+{n:"Plu-ts",c:"Smart Contracts",l:"TypeScript",r:"https://github.com/HarmonicLabs/plu-ts",d:"TypeScript-embedded Cardano smart contract language",o:"Harmonic Labs"},
+{n:"Scalus",c:"Smart Contracts",l:"Scala",r:"https://github.com/nau/scalus",d:"Scala 3 implementation of Cardano Plutus Platform",o:"Community"},
+{n:"liqwid-libs",c:"Smart Contracts",l:"Haskell",r:"https://github.com/Liqwid-Labs/liqwid-libs",d:"Plutarch library monorepo \u2014 common DeFi building blocks",o:"Liqwid Labs"},
+{n:"MeshJS",c:"Off-Chain SDKs",l:"TypeScript",r:"https://github.com/MeshJS/mesh",d:"Full-featured TypeScript SDK \u2014 tx builder, React components, 1M+ downloads",o:"MeshJS"},
+{n:"Lucid Evolution",c:"Off-Chain SDKs",l:"TypeScript",r:"https://github.com/Anastasia-Labs/lucid-evolution",d:"Maintained fork of Lucid \u2014 JS/TS off-chain framework",o:"Anastasia Labs"},
+{n:"Blaze",c:"Off-Chain SDKs",l:"TypeScript",r:"https://github.com/butaneprotocol/blaze-cardano",d:"TypeScript SDK with modular provider architecture",o:"Butane Protocol"},
+{n:"cardano-js-sdk",c:"Off-Chain SDKs",l:"TypeScript",r:"https://github.com/input-output-hk/cardano-js-sdk",d:"IOG\u2019s comprehensive TypeScript SDK collection",o:"IOG"},
+{n:"cardano-serialization-lib",c:"Off-Chain SDKs",l:"Rust/WASM",r:"https://github.com/nicholasgasior/cardano-serialization-lib",d:"Low-level WASM serialization (Rust compiled to JS)",o:"IOG"},
+{n:"Cometa.js",c:"Off-Chain SDKs",l:"JavaScript",r:"https://github.com/Biglup/cometa.js",d:"Fast, browser-ready JS toolkit for tx building",o:"Biglup"},
+{n:"PyCardano",c:"Off-Chain SDKs",l:"Python",r:"https://github.com/Python-Cardano/pycardano",d:"Standalone Cardano client library in Python",o:"Community"},
+{n:"Cometa.py",c:"Off-Chain SDKs",l:"Python",r:"https://github.com/Biglup/cometa.py",d:"High-performance Python lib for tx building and scripting",o:"Biglup"},
+{n:"Pallas",c:"Off-Chain SDKs",l:"Rust",r:"https://github.com/txpipe/pallas",d:"Rust building blocks \u2014 chain sync, block parsing, serialization",o:"TxPipe"},
+{n:"Oura",c:"Off-Chain SDKs",l:"Rust",r:"https://github.com/txpipe/oura",d:"Rust pipeline for cardano-node event streaming",o:"TxPipe"},
+{n:"cardano-multiplatform-lib",c:"Off-Chain SDKs",l:"Rust",r:"https://github.com/nicholasgasior/cardano-multiplatform-lib",d:"Rust serialization lib with WASM bindings",o:"dcSpark"},
+{n:"cardano-client-lib",c:"Off-Chain SDKs",l:"Java",r:"https://github.com/bloxbean/cardano-client-lib",d:"Java client with Blockfrost/Koios/Ogmios backends",o:"BloxBean"},
+{n:"Yaci",c:"Off-Chain SDKs",l:"Java",r:"https://github.com/bloxbean/yaci",d:"Java mini-protocol implementation for cardano-node",o:"BloxBean"},
+{n:"Kogmios",c:"Off-Chain SDKs",l:"Kotlin",r:"https://github.com/projectNEWM/kogmios",d:"Kotlin API library for interacting with Ogmios",o:"NEWM"},
+{n:"gouroboros",c:"Off-Chain SDKs",l:"Go",r:"https://github.com/blinklabs-io/gouroboros",d:"Go implementation of Ouroboros networking protocols",o:"Blink Labs"},
+{n:"libada-go",c:"Off-Chain SDKs",l:"Go",r:"https://github.com/Bitrue-exchange/libada-go",d:"Golang library for Cardano network",o:"Bitrue"},
+{n:"cardano_wallet_sdk",c:"Off-Chain SDKs",l:"Dart",r:"https://github.com/reaster/cardano_wallet_sdk",d:"Dart SDK for Cardano wallet/tx in Flutter apps",o:"Community"},
+{n:"CardanoSharp",c:"Off-Chain SDKs",l:".NET",r:"https://github.com/CardanoSharp/cardanosharp-wallet",d:".NET Cardano cryptographic and serialization library",o:"CardanoSharp"},
+{n:"OgmiosDotnet",c:"Off-Chain SDKs",l:".NET",r:"https://github.com/ItsDaveB/OgmiosDotnet",d:".NET 9.0 Ogmios client \u2014 chain sync, mempool, tx eval",o:"ItsDaveB"},
+{n:"Blockfrost .NET SDK",c:"Off-Chain SDKs",l:".NET",r:"https://github.com/blockfrost/blockfrost-dotnet",d:".NET SDK for the Blockfrost API",o:"Blockfrost"},
+{n:"cardano-db-sync",c:"Indexers",l:"Haskell",r:"https://github.com/IntersectMBO/cardano-db-sync",d:"Full chain indexer to PostgreSQL (batteries-included)",o:"IntersectMBO"},
+{n:"Kupo",c:"Indexers",l:"Haskell",r:"https://github.com/CardanoSolutions/kupo",d:"Lightweight, configurable chain-index with pattern filtering",o:"Cardano Solutions"},
+{n:"Ogmios",c:"Indexers",l:"Haskell",r:"https://github.com/CardanoSolutions/ogmios",d:"WebSocket/JSON-RPC bridge to cardano-node mini-protocols",o:"Cardano Solutions"},
+{n:"Yaci Store",c:"Indexers",l:"Java",r:"https://github.com/bloxbean/yaci-store",d:"Modular, high-performance indexer with plugin framework",o:"BloxBean"},
+{n:"Carp",c:"Indexers",l:"Rust",r:"https://github.com/dcSpark/carp",d:"Modular indexer with customizable execution plans",o:"dcSpark"},
+{n:"Scrolls",c:"Indexers",l:"Rust",r:"https://github.com/txpipe/scrolls",d:"Read-optimized indexer for common query patterns",o:"TxPipe"},
+{n:"Blockfrost",c:"API Providers",l:"API",r:"https://blockfrost.io",d:"REST API for Cardano (hosted + self-hosted RYO option)",o:"Blockfrost"},
+{n:"Koios",c:"API Providers",l:"API",r:"https://koios.rest",d:"Decentralized, elastic REST query layer (community-run)",o:"Community"},
+{n:"Maestro",c:"API Providers",l:"API",r:"https://www.gomaestro.org",d:"Blockchain indexer, APIs, and event management",o:"Maestro"},
+{n:"CardanoBI",c:"API Providers",l:"API",r:"https://cardanobi.io",d:"Open-source business intelligence API layer",o:"CardanoBI"},
+{n:"Blockfrost RYO",c:"API Providers",l:"TypeScript",r:"https://github.com/blockfrost/blockfrost-backend-ryo",d:"Run your own Blockfrost backend",o:"Blockfrost"},
+{n:"cardano-graphql",c:"API Providers",l:"TypeScript",r:"https://github.com/cardano-foundation/cardano-graphql",d:"GraphQL API for Cardano",o:"Cardano Foundation"},
+{n:"blockfrost-js",c:"API Providers",l:"TypeScript",r:"https://github.com/blockfrost/blockfrost-js",d:"TypeScript SDK for Blockfrost API",o:"Blockfrost"},
+{n:"blockfrost-python",c:"API Providers",l:"Python",r:"https://github.com/blockfrost/blockfrost-python",d:"Python SDK for Blockfrost API",o:"Blockfrost"},
+{n:"blockfrost-rust",c:"API Providers",l:"Rust",r:"https://github.com/blockfrost/blockfrost-rust",d:"Rust SDK for Blockfrost API",o:"Blockfrost"},
+{n:"blockfrost-haskell",c:"API Providers",l:"Haskell",r:"https://github.com/blockfrost/blockfrost-haskell",d:"Haskell SDK for Blockfrost API",o:"Blockfrost"},
+{n:"koios-api-python",c:"API Providers",l:"Python",r:"https://github.com/cardano-apexpool/koios-api-python",d:"Python client for Koios API",o:"Community"},
+{n:"Hydra",c:"Scaling",l:"Haskell",r:"https://github.com/cardano-scaling/hydra",d:"Layer 2 state channels for low-latency, high-throughput tx",o:"Cardano Scaling"},
+{n:"Mithril",c:"Scaling",l:"Rust",r:"https://github.com/input-output-hk/mithril",d:"Stake-based threshold multi-signatures for fast bootstrapping",o:"IOG"},
+{n:"Demeter.run",c:"Dev Environments",l:"Platform",r:"https://demeter.run",d:"Cloud platform \u2014 managed nodes, indexers, Ogmios, Kupo",o:"TxPipe"},
+{n:"Yaci DevKit",c:"Dev Environments",l:"Java",r:"https://github.com/bloxbean/yaci-devkit",d:"Local Cardano devnet for development and testing",o:"BloxBean"},
+{n:"Atlas",c:"Dev Environments",l:"Haskell",r:"https://github.com/geniusyield/atlas",d:"Haskell framework for off-chain code with test harness",o:"Genius Yield"},
+{n:"Aiken Starter Kit",c:"Dev Environments",l:"Aiken",r:"https://github.com/cardano-foundation/aiken-lucid-yaci-dev-kit-starter-kit",d:"Template project: Aiken + Lucid + Yaci DevKit",o:"Cardano Foundation"},
+{n:"Cardano Testnet Faucet",c:"Dev Environments",l:"Web",r:"https://developers.cardano.org/docs/get-started/cardano-testnet-faucet/",d:"tADA for testnet development",o:"Cardano Foundation"},
+{n:"GovTool",c:"Governance",l:"TypeScript",r:"https://github.com/IntersectMBO/govtool",d:"DRep registration, delegation, and governance action voting",o:"IntersectMBO"},
+{n:"Round Table",c:"Governance",l:"Haskell",r:"https://github.com/ADAOcommunity",d:"Open-source multi-sig wallet with DRep support",o:"ADAO"},
+{n:"SanchoNet",c:"Governance",l:"Platform",r:"https://sancho.network",d:"Dedicated governance testnet",o:"Community"},
+{n:"CExplorer",c:"Explorers",l:"Web",r:"https://cexplorer.io",d:"Oldest and most-featured Cardano explorer",o:"CExplorer"},
+{n:"CardanoScan",c:"Explorers",l:"Web",r:"https://cardanoscan.io",d:"Feature-rich explorer and analytics platform",o:"CardanoScan"},
+{n:"Cardano Updates",c:"Explorers",l:"Web",r:"https://cardanoupdates.com",d:"Development activity tracker across repos",o:"Community"},
+{n:"BuiltOnCardano",c:"Explorers",l:"Web",r:"https://builtoncardano.com",d:"Ecosystem directory and project browser",o:"Community"},
+{n:"pool.pm",c:"Explorers",l:"Web",r:"https://pool.pm",d:"NFT and token explorer",o:"Community"},
+{n:"cardano-wallet",c:"Wallet Infra",l:"Haskell",r:"https://github.com/cardano-foundation/cardano-wallet",d:"HTTP server + CLI for UTxO and HD wallet management",o:"Cardano Foundation"},
+{n:"cardano-addresses",c:"Wallet Infra",l:"Haskell",r:"https://github.com/IntersectMBO/cardano-addresses",d:"Address derivation library (Bech32, Byron, Shelley)",o:"IntersectMBO"},
+{n:"Cardano Peer Connect",c:"Wallet Infra",l:"TypeScript",r:"https://github.com/fabianbormann/cardano-peer-connect",d:"CIP-0045 WebRTC communication for dApps/wallets",o:"Community"},
+{n:"Cardano Signer",c:"Wallet Infra",l:"Bash",r:"https://github.com/gitmachtl/scripts",d:"Sign/verify data, generate DRep and CC keys",o:"Martin Lang"},
+{n:"NMKR Studio",c:"NFT & Tokens",l:".NET",r:"https://github.com/nftmakerio/NMKR-Studio",d:"NFT management platform",o:"NMKR"},
+{n:"Token Registry",c:"NFT & Tokens",l:"JSON",r:"https://github.com/cardano-foundation/cardano-token-registry",d:"Off-chain metadata registration for native tokens",o:"Cardano Foundation"},
+{n:"Anvil API",c:"NFT & Tokens",l:"API",r:"https://ada-anvil.io",d:"REST endpoints for minting, tx building, contract interaction",o:"Anvil"},
+{n:"Reeve",c:"Enterprise",l:"TypeScript",r:"https://github.com/cardano-foundation/cf-reeve-platform",d:"On-chain financial transparency & accounting",o:"Cardano Foundation"},
+{n:"CardanoPress",c:"Enterprise",l:"PHP",r:"https://github.com/CardanoPress/cardanopress",d:"WordPress plugin for Cardano integration + governance",o:"CardanoPress"},
+{n:"Charli3",c:"Oracles",l:"Platform",r:"https://charli3.io",d:"Decentralized oracle network for Cardano",o:"Charli3"},
+{n:"Orcfax",c:"Oracles",l:"Platform",r:"https://orcfax.io",d:"Decentralized oracle with inter-node vetoing",o:"Orcfax"}
+];
+
+var CATS=[],LANGS=[],seen={},seenL={};
+TOOLS.forEach(function(t){if(!seen[t.c]){seen[t.c]=1;CATS.push(t.c)}if(!seenL[t.l]){seenL[t.l]=1;LANGS.push(t.l)}});
+LANGS.sort();
+
+var LC={"Haskell":"#5e5086","Rust":"#dea584","Go":"#00ADD8","TypeScript":"#3178c6","JavaScript":"#f7df1e","Python":"#3572A5","Java":"#b07219",".NET":"#512BD4","Kotlin":"#A97BFF","Bash":"#89e051","Scala":"#c22d40","Rust/Aiken":"#00d4aa","Aiken":"#00d4aa","PHP":"#4F5D95","API":"#0ea5e9","Web":"#64748b","Platform":"#64748b","JSON":"#94a3b8","Rust/WASM":"#dea584","Dart":"#00B4AB"};
+var CI={"Node Implementations":"\u2B21","CLI & Node Tooling":"\u2318","Ledger & Specs":"\uD83D\uDCD0","SPO Tooling":"\u2699","Smart Contracts":"\u25C8","Off-Chain SDKs":"\u26A1","Indexers":"\u25C9","API Providers":"\u27D0","Scaling":"\u25B3","Dev Environments":"\u2699","Governance":"\u2696","Explorers":"\u25CE","Wallet Infra":"\uD83D\uDD10","NFT & Tokens":"\u2726","Enterprise":"\u25C6","Oracles":"\u25C8"};
+
+function Card(p){
+  var t=p.t,col=LC[t.l]||"#64748b";
+  return e("a",{href:t.r,target:"_blank",rel:"noopener noreferrer",className:"card"},
+    e("div",{className:"card-top"},
+      e("span",{className:"card-name"},t.n),
+      e("span",{className:"lang-tag",style:{background:col+"20",color:col,border:"1px solid "+col+"40"}},t.l)
+    ),
+    e("div",{className:"card-desc"},t.d),
+    e("div",{className:"card-bottom"},
+      e("span",null,t.o),
+      e("span",{className:"card-arrow"},t.r.indexOf("github.com")!==-1?"GitHub \u2192":"Website \u2192")
+    )
+  );
+}
+
+function App(){
+  var _s=useState(""),s=_s[0],setS=_s[1];
+  var _c=useState("All"),cat=_c[0],setCat=_c[1];
+  var _l=useState("All"),lang=_l[0],setLang=_l[1];
+  var filtered=TOOLS.filter(function(t){
+    var q=s.toLowerCase();
+    var ms=s===""||t.n.toLowerCase().indexOf(q)!==-1||t.d.toLowerCase().indexOf(q)!==-1||t.l.toLowerCase().indexOf(q)!==-1||t.o.toLowerCase().indexOf(q)!==-1;
+    return ms&&(cat==="All"||t.c===cat)&&(lang==="All"||t.l===lang);
+  });
+  var orgs={};TOOLS.forEach(function(t){orgs[t.o]=1});var orgCount=Object.keys(orgs).length;
+
+  return e("div",null,
+    e("header",{className:"header"},
+      e("a",{className:"header-brand",href:"#"},e("div",{className:"header-logo"},"C"),e("span",{className:"header-name"},"cardano-devtools")),
+      e("a",{className:"gh-link",href:"https://github.com/BEACNpool/cardano-devtools-directory",target:"_blank",rel:"noopener noreferrer"},
+        e("svg",{width:14,height:14,viewBox:"0 0 24 24",fill:"currentColor"},e("path",{d:"M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"})),"Star on GitHub")),
+    e("section",{className:"hero"},
+      e("div",{className:"badge"},"Community-Maintained \u00B7 Open Source \u00B7 Neutral"),
+      e("h1",null,"Cardano Developer ",e("span",{className:"grad"},"Tools Directory")),
+      e("p",null,"Every actively maintained tool, library, and infrastructure project in the Cardano ecosystem \u2014 curated, categorized, and searchable."),
+      e("div",{className:"stats"},
+        e("div",{className:"stat"},e("div",{className:"stat-val"},TOOLS.length),e("div",{className:"stat-label"},"Tools")),
+        e("div",{className:"stat"},e("div",{className:"stat-val"},CATS.length),e("div",{className:"stat-label"},"Categories")),
+        e("div",{className:"stat"},e("div",{className:"stat-val"},LANGS.length),e("div",{className:"stat-label"},"Languages")),
+        e("div",{className:"stat"},e("div",{className:"stat-val"},orgCount),e("div",{className:"stat-label"},"Orgs"))
+      ),
+      e("div",{className:"search-wrap"},
+        e("svg",{className:"search-icon",width:16,height:16,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2},e("circle",{cx:11,cy:11,r:8}),e("path",{d:"m21 21-4.35-4.35"})),
+        e("input",{className:"search-input",type:"text",value:s,onChange:function(ev){setS(ev.target.value)},placeholder:"Search tools, languages, organizations..."})
+      )
+    ),
+    e("main",{className:"main"},
+      e("div",{className:"filters"},
+        e("button",{className:"fbtn"+(cat==="All"?" active":""),onClick:function(){setCat("All")}},"All"),
+        CATS.map(function(c){return e("button",{key:c,className:"fbtn"+(cat===c?" active":""),onClick:function(){setCat(c)}},(CI[c]||"\u25C7")+" "+c)})
+      ),
+      e("div",{className:"lang-filters"},
+        e("button",{className:"lbtn"+(lang==="All"?" active":""),onClick:function(){setLang("All")},style:lang==="All"?{color:"var(--accent)",borderColor:"var(--accent-border)"}:{}},"All Languages"),
+        LANGS.map(function(l){return e("button",{key:l,className:"lbtn"+(lang===l?" active":""),onClick:function(){setLang(l)},style:lang===l?{color:LC[l]||"#94a3b8",borderColor:(LC[l]||"#64748b")+"60",background:(LC[l]||"#64748b")+"15"}:{}},l)})
+      ),
+      e("div",{className:"result-count"},"Showing "+filtered.length+" of "+TOOLS.length+" tools"),
+      filtered.length===0
+        ?e("div",{className:"empty"},e("div",{className:"empty-icon"},"\u25C7"),e("p",null,"No tools match your filters."))
+        :e("div",{className:"grid"},filtered.map(function(t){return e(Card,{key:t.n+t.c,t:t})}))
+    ),
+    e("footer",{className:"footer"},
+      e("div",{className:"footer-brand"},
+        e("img",{className:"footer-pfp",src:"https://www.beacnpool.org/pfp.png",alt:"BEACNpool",loading:"lazy"}),
+        e("div",{style:{textAlign:"left"}},e("div",{className:"footer-name"},"BEACNpool"),e("div",{className:"footer-sub"},"Cardano DRep \u00B7 0% Margin SPO \u00B7 Chicago"))
+      ),
+      e("p",null,"Community-maintained and open source. No bias, no sponsorships. PRs welcome \u2014 help us keep this directory complete and accurate."),
+      e("div",{className:"footer-links"},
+        e("a",{className:"primary",href:"https://github.com/BEACNpool/cardano-devtools-directory",target:"_blank"},"GitHub Repo"),
+        e("span",{style:{color:"var(--ghost)"}},"\u00B7"),
+        e("a",{className:"secondary",href:"https://github.com/BEACNpool/cardano-devtools-directory/blob/main/CONTRIBUTING.md",target:"_blank"},"Contributing"),
+        e("span",{style:{color:"var(--ghost)"}},"\u00B7"),
+        e("a",{className:"secondary",href:"https://www.beacnpool.org",target:"_blank"},"beacnpool.org")
+      ),
+      e("div",{className:"footer-ts"},"Built for the Cardano community \u00B7 Last updated March 2026")
+    )
+  );
+}
+ReactDOM.render(e(App),document.getElementById("app"));
+</script>
+</body>
+</html>
