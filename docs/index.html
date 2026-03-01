@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cardano DevTools Directory</title>
+    <meta name="description" content="Searchable Cardano developer tools directory." />
+    <style>
+      /* keep body clean; component handles styling */
+      html, body { height: 100%; }
+      body { margin: 0; background: #0a0e17; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- React via CDN (no build step). This keeps GitHub Pages dead simple. -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+    <!-- Babel in-browser JSX transform. (Later we can switch to a real build pipeline.) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- App -->
+    <script type="text/babel" data-presets="react" src="./cardano-directory.jsx"></script>
+    <script type="text/babel" data-presets="react" src="./boot.jsx"></script>
+  </body>
+</html>
