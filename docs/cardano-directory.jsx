@@ -86,7 +86,6 @@ const TOOLS_DATA = [
   // Governance
   { name: "GovTool", category: "Governance", language: "TypeScript", repo: "https://github.com/IntersectMBO/govtool", description: "DRep registration, delegation, and governance action voting", org: "IntersectMBO" },
   { name: "SanchoNet", category: "Governance", language: "Platform", repo: "https://sancho.network", description: "Dedicated governance testnet", org: "Community" },
-  { name: "DRep Watch", category: "Governance", language: "Web", repo: "https://drepwatch.com", description: "Monitor DRep activity and voting power in real time", org: "Community" },
   { name: "ChangWatch", category: "Governance", language: "Web", repo: "https://changwatch.com", description: "Vote threshold dashboard with live stake distribution", org: "Community" },
 
   // Explorers
