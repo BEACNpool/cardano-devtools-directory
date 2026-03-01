@@ -1,28 +1,674 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cardano DevTools Directory</title>
-    <meta name="description" content="Searchable Cardano developer tools directory." />
-    <style>
-      /* keep body clean; component handles styling */
-      html, body { height: 100%; }
-      body { margin: 0; background: #0a0e17; }
-    </style>
-  </head>
-  <body>
-    <div id="root"></div>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Watchtower — Cardano Developer Tools Directory</title>
+<meta name="description" content="AI-curated Cardano developer tools directory. Signal through the noise. By BEACNpool × OpenClaw.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cyan: #00e5ff;
+    --cyan-dim: #00a5b8;
+    --amber: #ffb300;
+    --amber-dim: #b87a00;
+    --green: #39ff14;
+    --red: #e53935;
+    --bg-deep: #0a0c10;
+    --bg-card: #0f1218;
+    --bg-card-hover: #141920;
+    --bg-surface: #1a1f2a;
+    --border: #1e2636;
+    --border-hover: #2a3448;
+    --text: #e0e6f0;
+    --text-dim: #7a8599;
+    --text-muted: #4a5568;
+    --font-display: 'Oxanium', sans-serif;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
 
-    <!-- React via CDN (no build step). This keeps GitHub Pages dead simple. -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    <!-- Babel in-browser JSX transform. (Later we can switch to a real build pipeline.) -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  html { scroll-behavior: smooth; }
 
-    <!-- App -->
-    <script type="text/babel" data-presets="react" src="./cardano-directory.jsx"></script>
-    <script type="text/babel" data-presets="react" src="./boot.jsx"></script>
-  </body>
+  body {
+    background: var(--bg-deep);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── AMBIENT BACKGROUND ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse 800px 600px at 20% 10%, rgba(0,229,255,0.04) 0%, transparent 70%),
+      radial-gradient(ellipse 600px 800px at 80% 80%, rgba(255,179,0,0.03) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── GRID OVERLAY ─── */
+  .grid-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.015) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,12,16,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    transition: all 0.3s ease;
+  }
+
+  nav .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 72px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    text-decoration: none;
+    color: var(--text);
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    font-size: 1.05rem;
+  }
+
+  .brand .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 16px rgba(0,229,255,0.8);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+    font-size: 0.95rem;
+  }
+
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-weight: 500;
+  }
+
+  .nav-links a:hover {
+    color: var(--cyan);
+    text-shadow: 0 0 12px rgba(0,229,255,0.6);
+  }
+
+  .cta {
+    padding: 0.55rem 0.95rem;
+    border: 1px solid rgba(0,229,255,0.35);
+    border-radius: 10px;
+    background: rgba(0,229,255,0.05);
+    color: var(--cyan) !important;
+    font-weight: 600;
+  }
+
+  .cta:hover {
+    background: rgba(0,229,255,0.1);
+    border-color: rgba(0,229,255,0.55);
+  }
+
+  /* ─── HERO ─── */
+  header {
+    position: relative;
+    z-index: 1;
+    padding: 140px 2rem 80px;
+  }
+
+  .hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.3rem, 4vw, 3.3rem);
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 .accent {
+    color: var(--cyan);
+    text-shadow:
+      0 0 18px rgba(0,229,255,0.45),
+      0 0 38px rgba(0,229,255,0.18);
+  }
+
+  .hero p {
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    max-width: 52ch;
+    margin-bottom: 1.4rem;
+  }
+
+  .hero .sub {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: rgba(122,133,153,0.9);
+  }
+
+  .badge-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .badge-glow {
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(0,229,255,0.25) 0%, transparent 60%),
+      radial-gradient(circle at 70% 70%, rgba(255,179,0,0.18) 0%, transparent 60%);
+    filter: blur(10px);
+    animation: pulse 4.8s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.75; }
+    50% { transform: scale(1.06); opacity: 1; }
+  }
+
+  .badge {
+    width: min(340px, 86%);
+    height: auto;
+    border-radius: 22px;
+    box-shadow:
+      0 0 0 1px rgba(0,229,255,0.2),
+      0 18px 70px rgba(0,0,0,0.65),
+      0 0 40px rgba(0,229,255,0.2);
+    transform: translateZ(0);
+  }
+
+  /* ─── STATS ─── */
+  .stats {
+    max-width: 1200px;
+    margin: 2.6rem auto 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .stat {
+    background: rgba(15,18,24,0.7);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1rem 1.1rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .stat .k {
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .stat .v {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.35rem;
+    letter-spacing: 0.02em;
+  }
+
+  .stat .v.cyan { color: var(--cyan); }
+  .stat .v.amber { color: var(--amber); }
+
+  /* ─── MAIN ─── */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem 90px;
+  }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    margin: 3.4rem 0 1.4rem;
+  }
+
+  .section-head h2 {
+    font-family: var(--font-display);
+    font-size: 1.55rem;
+    letter-spacing: 0.03em;
+  }
+
+  .section-head p {
+    color: var(--text-dim);
+    max-width: 65ch;
+    font-size: 0.98rem;
+  }
+
+  /* ─── TOOL GRID ─── */
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.1rem;
+  }
+
+  .card {
+    position: relative;
+    background: rgba(15,18,24,0.7);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.2rem 1.2rem 1.05rem;
+    transition: all 0.22s ease;
+    overflow: hidden;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    background: rgba(20,25,32,0.85);
+    border-color: rgba(0,229,255,0.22);
+    box-shadow: 0 16px 50px rgba(0,0,0,0.55);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(600px 200px at 30% 0%, rgba(0,229,255,0.08), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.22s ease;
+    pointer-events: none;
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card h3 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.02em;
+  }
+
+  .card p {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 0.85rem;
+    min-height: 2.9em;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 0.22rem 0.5rem;
+    border-radius: 999px;
+    border: 1px solid rgba(42,52,72,0.9);
+    color: rgba(224,230,240,0.85);
+    background: rgba(26,31,42,0.55);
+  }
+
+  .tag.cyan { border-color: rgba(0,229,255,0.25); color: rgba(0,229,255,0.85); }
+  .tag.amber { border-color: rgba(255,179,0,0.22); color: rgba(255,179,0,0.85); }
+
+  .links {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .links a {
+    color: var(--cyan);
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .links a:hover { text-decoration: underline; }
+
+  /* ─── COLLAPSIBLES ─── */
+  details {
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: rgba(15,18,24,0.55);
+    margin-bottom: 1.2rem;
+    overflow: hidden;
+  }
+
+  summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 1rem 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    user-select: none;
+  }
+
+  summary::-webkit-details-marker { display: none; }
+
+  .summary-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .chev {
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid rgba(224,230,240,0.6);
+    border-bottom: 2px solid rgba(224,230,240,0.6);
+    transform: rotate(-45deg);
+    transition: transform 0.2s ease;
+  }
+
+  details[open] .chev { transform: rotate(45deg); }
+
+  .pill {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: rgba(122,133,153,0.9);
+    border: 1px solid rgba(42,52,72,0.8);
+    padding: 0.18rem 0.55rem;
+    border-radius: 999px;
+  }
+
+  .panel {
+    padding: 0.2rem 1.1rem 1.2rem;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    background: rgba(10,12,16,0.7);
+    padding: 2.2rem 2rem;
+    color: var(--text-dim);
+    position: relative;
+    z-index: 1;
+  }
+
+  footer .inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  footer a { color: var(--cyan); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 980px) {
+    .hero { grid-template-columns: 1fr; }
+    .badge-wrap { order: -1; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .tool-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 640px) {
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+    header { padding: 120px 1rem 70px; }
+    main { padding: 0 1rem 80px; }
+    .tool-grid { grid-template-columns: 1fr; }
+    .section-head { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="grid-overlay"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="#top">
+      <span class="dot"></span>
+      <span>THE WATCHTOWER</span>
+    </a>
+    <div class="nav-links">
+      <a href="#directory">Directory</a>
+      <a href="#about">About</a>
+      <a class="cta" href="https://github.com/BEACNpool/cardano-devtools-directory" target="_blank" rel="noreferrer">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<header id="top">
+  <div class="hero">
+    <div>
+      <h1>
+        Signal through the noise.
+        <span class="accent">The Watchtower</span>
+      </h1>
+      <p>
+        An AI-curated directory of Cardano developer tools.
+        Built by <strong>BEACNpool</strong> × <strong>OpenClaw</strong>.
+      </p>
+      <div class="sub">
+        Updated daily · Collapsible categories · Clickable repo cards
+      </div>
+    </div>
+
+    <div class="badge-wrap">
+      <div class="badge-glow"></div>
+      <img class="badge" src="badge.png" alt="OpenClaw badge">
+      <div class="sub" style="margin-top:0.9rem; text-align:center; max-width:36ch;">
+        Joint project by <strong>BEACNpool</strong> × <strong>OpenClaw (AI)</strong>.
+        <br>
+        <span style="color: rgba(122,133,153,0.95)">Curated by AI to reduce editorial agenda; humans maintain the pipeline.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats" aria-label="Quick stats">
+    <div class="stat">
+      <div class="k">Projects indexed</div>
+      <div class="v cyan" id="stat-projects">—</div>
+    </div>
+    <div class="stat">
+      <div class="k">Categories</div>
+      <div class="v" id="stat-cats">—</div>
+    </div>
+    <div class="stat">
+      <div class="k">Languages</div>
+      <div class="v amber" id="stat-langs">—</div>
+    </div>
+    <div class="stat">
+      <div class="k">Last build</div>
+      <div class="v" id="stat-updated">—</div>
+    </div>
+  </div>
+</header>
+
+<main id="directory">
+  <div class="section-head">
+    <h2>Directory</h2>
+    <p>
+      The full directory is here, but it shouldn’t hit you like a brick.
+      Start with Core Infrastructure and expand outward.
+    </p>
+  </div>
+
+  <div id="directory-root"></div>
+
+  <div class="section-head" id="about">
+    <h2>About</h2>
+    <p>
+      “The Watchtower” is BEACN’s lighthouse lens on the Cardano dev ecosystem.
+      OpenClaw scans, clusters, and curates; humans verify what matters.
+    </p>
+  </div>
+
+  <details open>
+    <summary>
+      <span class="summary-left">
+        <span class="chev"></span>
+        Method
+      </span>
+      <span class="pill">evidence-first</span>
+    </summary>
+    <div class="panel">
+      <div class="tool-grid">
+        <div class="card">
+          <h3>AI summary</h3>
+          <p>Fast orientation. Always labeled as AI-generated.</p>
+          <div class="tags"><span class="tag cyan">summaries</span></div>
+        </div>
+        <div class="card">
+          <h3>Receipts</h3>
+          <p>Links to primary sources whenever possible.</p>
+          <div class="tags"><span class="tag amber">citations</span></div>
+        </div>
+        <div class="card">
+          <h3>Human override</h3>
+          <p>Humans decide what to publish, pin, or flag.</p>
+          <div class="tags"><span class="tag">review</span></div>
+        </div>
+      </div>
+    </div>
+  </details>
+</main>
+
+<footer>
+  <div class="inner">
+    <div>
+      <strong>The Watchtower</strong> · BEACNpool × OpenClaw
+    </div>
+    <div>
+      <a href="https://github.com/BEACNpool/cardano-devtools-directory" target="_blank" rel="noreferrer">Source</a>
+      ·
+      <a href="#top">Back to top</a>
+    </div>
+  </div>
+</footer>
+
+<script type="module">
+  import directory from "./cardano-directory.jsx";
+
+  const root = document.getElementById('directory-root');
+
+  // category ordering: show Core Infrastructure first, then everything else
+  const preferredFirst = ["Core Infrastructure"];
+
+  const categories = Object.keys(directory);
+  categories.sort((a,b) => {
+    const ai = preferredFirst.includes(a) ? 0 : 1;
+    const bi = preferredFirst.includes(b) ? 0 : 1;
+    if (ai !== bi) return ai - bi;
+    return a.localeCompare(b);
+  });
+
+  // Build collapsible categories
+  let projectCount = 0;
+  const langs = new Set();
+
+  function tagClass(t){
+    const s = String(t).toLowerCase();
+    if (s.includes('typescript') || s.includes('js')) return 'cyan';
+    if (s.includes('rust') || s.includes('haskell') || s.includes('plutus')) return 'amber';
+    return '';
+  }
+
+  function card(tool){
+    projectCount++;
+    (tool.languages || tool.lang || tool.tags || []).forEach?.(l => langs.add(String(l)));
+
+    const langTags = (tool.languages || tool.lang || tool.tags || []);
+    const tagsHtml = langTags.slice(0, 6).map(t => `<span class="tag ${tagClass(t)}">${t}</span>`).join('');
+
+    const links = [];
+    if (tool.repo) links.push(`<a href="${tool.repo}" target="_blank" rel="noreferrer">Repo</a>`);
+    if (tool.website) links.push(`<a href="${tool.website}" target="_blank" rel="noreferrer">Site</a>`);
+    if (tool.docs) links.push(`<a href="${tool.docs}" target="_blank" rel="noreferrer">Docs</a>`);
+
+    return `
+      <div class="card">
+        <h3>${tool.name || tool.title || 'Untitled'}</h3>
+        <p>${tool.description || tool.desc || ''}</p>
+        <div class="tags">${tagsHtml}</div>
+        <div class="links">${links.join(' · ')}</div>
+      </div>
+    `;
+  }
+
+  for (const cat of categories) {
+    const tools = directory[cat] || [];
+
+    const open = cat === "Core Infrastructure";
+
+    const html = `
+      <details ${open ? 'open' : ''}>
+        <summary>
+          <span class="summary-left">
+            <span class="chev"></span>
+            ${cat}
+          </span>
+          <span class="pill">${tools.length}</span>
+        </summary>
+        <div class="panel">
+          <div class="tool-grid">
+            ${tools.map(card).join('')}
+          </div>
+        </div>
+      </details>
+    `;
+
+    root.insertAdjacentHTML('beforeend', html);
+  }
+
+  // Stats
+  document.getElementById('stat-projects').textContent = projectCount;
+  document.getElementById('stat-cats').textContent = categories.length;
+  document.getElementById('stat-langs').textContent = langs.size || '—';
+
+  // naive "last build" = today
+  const d = new Date();
+  document.getElementById('stat-updated').textContent = d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: '2-digit' });
+</script>
+</body>
 </html>
