@@ -280,6 +280,78 @@
     font-size: 0.98rem;
   }
 
+  .controls {
+    display: grid;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .search-row {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .search-input {
+    flex: 1 1 320px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(15,18,24,0.7);
+    color: var(--text);
+    padding: 0.7rem 0.85rem;
+    font-family: var(--font-body);
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: rgba(0,229,255,0.45);
+    box-shadow: 0 0 0 3px rgba(0,229,255,0.15);
+  }
+
+  .btn {
+    border: 1px solid var(--border);
+    background: rgba(15,18,24,0.8);
+    color: var(--text-dim);
+    border-radius: 10px;
+    padding: 0.62rem 0.8rem;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+
+  .btn:hover {
+    color: var(--cyan);
+    border-color: rgba(0,229,255,0.35);
+  }
+
+  .chip-row {
+    display: flex;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    border: 1px solid var(--border);
+    background: rgba(26,31,42,0.5);
+    color: var(--text-dim);
+    border-radius: 999px;
+    padding: 0.3rem 0.66rem;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    cursor: pointer;
+  }
+
+  .chip.active {
+    color: var(--cyan);
+    border-color: rgba(0,229,255,0.42);
+    background: rgba(0,229,255,0.09);
+  }
+
+  .helper-text {
+    color: var(--text-dim);
+    font-size: 0.88rem;
+  }
+
   /* ─── TOOL GRID ─── */
   .tool-grid {
     display: grid;
@@ -458,6 +530,7 @@
     main { padding: 0 1rem 80px; }
     .tool-grid { grid-template-columns: 1fr; }
     .section-head { flex-direction: column; align-items: flex-start; }
+    .search-row .btn { flex: 1 1 auto; }
   }
 </style>
 </head>
@@ -534,6 +607,17 @@
     </p>
   </div>
 
+  <div class="controls" aria-label="Directory controls">
+    <div class="search-row">
+      <input id="search-input" class="search-input" type="search" placeholder="Search tools, orgs, languages, or descriptions…" aria-label="Search the Cardano developer tools directory" />
+      <button id="expand-all" class="btn" type="button">Expand all</button>
+      <button id="collapse-all" class="btn" type="button">Collapse all</button>
+      <button id="reset-filters" class="btn" type="button">Reset</button>
+    </div>
+    <div id="category-chips" class="chip-row" aria-label="Filter by category"></div>
+    <div id="results-summary" class="helper-text">Loading directory…</div>
+  </div>
+
   <div id="directory-root"></div>
 
   <div class="section-head" id="about">
@@ -564,6 +648,12 @@
   import directory from "./docs/cardano-directory.js";
 
   const root = document.getElementById('directory-root');
+  const searchInput = document.getElementById('search-input');
+  const chipsRoot = document.getElementById('category-chips');
+  const resultsSummary = document.getElementById('results-summary');
+  const expandAllBtn = document.getElementById('expand-all');
+  const collapseAllBtn = document.getElementById('collapse-all');
+  const resetFiltersBtn = document.getElementById('reset-filters');
 
   // category ordering: show Core Infrastructure first, then everything else
   const preferredFirst = ["Core Infrastructure"];
@@ -577,8 +667,11 @@
   });
 
   // Build collapsible categories
-  let projectCount = 0;
+  const projectCount = Object.values(directory).reduce((sum, tools) => sum + tools.length, 0);
+  let visibleProjectCount = 0;
   const langs = new Set();
+  let activeCategory = 'All';
+  let searchTerm = '';
 
   function tagClass(t){
     const s = String(t).toLowerCase();
@@ -588,7 +681,6 @@
   }
 
   function card(tool){
-    projectCount++;
     (tool.languages || tool.lang || tool.tags || []).forEach?.(l => langs.add(String(l)));
 
     const langTags = (tool.languages || tool.lang || tool.tags || []);
@@ -609,30 +701,103 @@
     `;
   }
 
-  for (const cat of categories) {
-    const tools = directory[cat] || [];
-
-    const open = cat === "Core Infrastructure";
-
-    const html = `
-      <details ${open ? 'open' : ''}>
-        <summary>
-          <span class="summary-left">
-            <span class="chev"></span>
-            ${cat}
-          </span>
-          <span class="pill">${tools.length}</span>
-        </summary>
-        <div class="panel">
-          <div class="tool-grid">
-            ${tools.map(card).join('')}
-          </div>
-        </div>
-      </details>
-    `;
-
-    root.insertAdjacentHTML('beforeend', html);
+  function matchesSearch(tool, term) {
+    if (!term) return true;
+    const haystack = [
+      tool.name,
+      tool.description,
+      tool.desc,
+      tool.org,
+      ...(tool.languages || tool.lang || tool.tags || [])
+    ].filter(Boolean).join(' ').toLowerCase();
+    return haystack.includes(term);
   }
+
+  function renderDirectory() {
+    root.innerHTML = '';
+    visibleProjectCount = 0;
+
+    for (const cat of categories) {
+      const tools = directory[cat] || [];
+      const filteredTools = tools.filter(tool => {
+        const categoryOk = activeCategory === 'All' || activeCategory === cat;
+        return categoryOk && matchesSearch(tool, searchTerm);
+      });
+
+      if (filteredTools.length === 0) continue;
+
+      visibleProjectCount += filteredTools.length;
+      const open = cat === 'Core Infrastructure' || searchTerm.length > 0 || activeCategory !== 'All';
+
+      const html = `
+        <details ${open ? 'open' : ''}>
+          <summary>
+            <span class="summary-left">
+              <span class="chev"></span>
+              ${cat}
+            </span>
+            <span class="pill">${filteredTools.length}</span>
+          </summary>
+          <div class="panel">
+            <div class="tool-grid">
+              ${filteredTools.map(card).join('')}
+            </div>
+          </div>
+        </details>
+      `;
+
+      root.insertAdjacentHTML('beforeend', html);
+    }
+
+    if (visibleProjectCount === 0) {
+      root.innerHTML = '<p class="helper-text" style="padding:1.2rem 0;">No tools match your search yet. Try broader terms like “wallet”, “indexer”, or “Aiken”.</p>';
+    }
+
+    const activeLabel = activeCategory === 'All' ? 'all categories' : activeCategory;
+    resultsSummary.textContent = `Showing ${visibleProjectCount} of ${projectCount} tools in ${activeLabel}.`;
+  }
+
+  function renderCategoryChips() {
+    const chips = ['All', ...categories].map(cat => {
+      const isActive = cat === activeCategory;
+      const count = cat === 'All' ? projectCount : (directory[cat] || []).length;
+      return `<button class="chip ${isActive ? 'active' : ''}" type="button" data-category="${cat}">${cat} (${count})</button>`;
+    }).join('');
+
+    chipsRoot.innerHTML = chips;
+  }
+
+  renderCategoryChips();
+  renderDirectory();
+
+  searchInput.addEventListener('input', (event) => {
+    searchTerm = event.target.value.trim().toLowerCase();
+    renderDirectory();
+  });
+
+  chipsRoot.addEventListener('click', (event) => {
+    const btn = event.target.closest('button[data-category]');
+    if (!btn) return;
+    activeCategory = btn.getAttribute('data-category');
+    renderCategoryChips();
+    renderDirectory();
+  });
+
+  expandAllBtn.addEventListener('click', () => {
+    root.querySelectorAll('details').forEach(el => { el.open = true; });
+  });
+
+  collapseAllBtn.addEventListener('click', () => {
+    root.querySelectorAll('details').forEach(el => { el.open = false; });
+  });
+
+  resetFiltersBtn.addEventListener('click', () => {
+    activeCategory = 'All';
+    searchTerm = '';
+    searchInput.value = '';
+    renderCategoryChips();
+    renderDirectory();
+  });
 
   // Stats
   document.getElementById('stat-projects').textContent = projectCount;
