@@ -1,5 +1,9 @@
 # Cardano Developer Tools Directory
 
+## 🌐 GitHub Pages
+- Directory (main): https://beacnpool.github.io/cardano-devtools-directory/
+- Docs app: https://beacnpool.github.io/cardano-devtools-directory/docs/
+
 > A curated list of tools, libraries, and infrastructure for building on Cardano.
 > Hosted by **BEACNpool**. Maintained as a community resource.
 > Last updated: March 2026
