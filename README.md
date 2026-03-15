@@ -82,7 +82,10 @@
 ### Python
 | Project | Repo | Description |
 |---------|------|-------------|
+| charli3-dendrite | [Charli3-Official/charli3-dendrite](https://github.com/Charli3-Official/charli3-dendrite) | Python SDK for querying and swapping across Cardano DEXs (Minswap, SundaeSwap, WingRiders, and more) |
 | Cometa.py | [Biglup/cometa.py](https://github.com/Biglup/cometa.py) | High-performance Python lib for tx building and scripting |
+| dbsync-py | [theeldermillenial/dbsync-py](https://github.com/theeldermillenial/dbsync-py) | SQLModel ORM helpers for type-safe access to cardano-db-sync PostgreSQL |
+| kupo-py | [theeldermillenial/kupo-py](https://github.com/theeldermillenial/kupo-py) | Async Python client for Kupo — type-safe Pydantic responses |
 | PyCardano | [Python-Cardano/pycardano](https://github.com/Python-Cardano/pycardano) | Standalone Cardano client library in Python |
 
 ### Rust
