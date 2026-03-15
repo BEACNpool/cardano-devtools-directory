@@ -8,6 +8,7 @@ const TOOLS_DATA = [
   { name: "Amaru", category: "Node Implementations", language: "Rust", repo: "https://github.com/pragma-org/amaru", description: "Alternative node client by Pragma (exploratory phase)", org: "Pragma" },
   { name: "Dolos", category: "Node Implementations", language: "Rust", repo: "https://github.com/txpipe/dolos", description: "Lightweight data node for read-only chain following", org: "TxPipe" },
   { name: "Dingo", category: "Node Implementations", language: "Go", repo: "https://github.com/blinklabs-io/dingo", description: "Go-based node using Ouroboros N2N mini-protocols", org: "Blink Labs" },
+  { name: "Torsten", category: "Node Implementations", language: "Rust", repo: "https://github.com/michaeljfazio/torsten", description: "Full Cardano node in Rust — Praos consensus, UTxO-HD, Conway-era support (alpha)", org: "Sandstone Pool" },
 
   // CLI & Node Tooling
   { name: "cardano-cli", category: "CLI & Node Tooling", language: "Haskell", repo: "https://github.com/IntersectMBO/cardano-cli", description: "Official CLI for node interaction, tx building, governance", org: "IntersectMBO" },
@@ -67,6 +68,7 @@ const TOOLS_DATA = [
   { name: "CardanoBI", category: "API Providers", language: "API", repo: "https://cardanobi.io", description: "Open-source business intelligence API layer", org: "CardanoBI" },
   { name: "Blockfrost RYO", category: "API Providers", language: "TypeScript", repo: "https://github.com/blockfrost/blockfrost-backend-ryo", description: "Run your own Blockfrost backend", org: "Blockfrost" },
   { name: "cardano-graphql", category: "API Providers", language: "TypeScript", repo: "https://github.com/cardano-foundation/cardano-graphql", description: "GraphQL API for Cardano", org: "Cardano Foundation" },
+  { name: "koios-mcp", category: "API Providers", language: "TypeScript", repo: "https://github.com/michaeljfazio/koios-mcp", description: "MCP server exposing all 95 Koios endpoints to LLMs and AI agents", org: "michaeljfazio" },
 
   // Scaling
   { name: "Hydra", category: "Scaling", language: "Haskell", repo: "https://github.com/cardano-scaling/hydra", description: "Layer 2 state channels for low-latency, high-throughput tx", org: "Cardano Scaling" },

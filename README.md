@@ -21,6 +21,7 @@
 | Amaru | Rust | [pragma-org/amaru](https://github.com/pragma-org/amaru) | Alternative node client by Pragma (exploratory phase) |
 | Dolos | Rust | [txpipe/dolos](https://github.com/txpipe/dolos) | Lightweight data node for read-only chain following |
 | Dingo | Go | [blinklabs-io/dingo](https://github.com/blinklabs-io/dingo) | Go-based node using Ouroboros N2N mini-protocols |
+| Torsten | Rust | [michaeljfazio/torsten](https://github.com/michaeljfazio/torsten) | Full Cardano node in Rust — Praos consensus, UTxO-HD, Conway-era support (alpha) |
 
 ### CLI & Node Tooling
 | Project | Language | Repo | Description |
@@ -150,6 +151,7 @@
 |---------|------|-------------|
 | Blockfrost RYO | [blockfrost/blockfrost-backend-ryo](https://github.com/blockfrost/blockfrost-backend-ryo) | Run your own Blockfrost backend |
 | cardano-graphql | [cardano-foundation/cardano-graphql](https://github.com/cardano-foundation/cardano-graphql) | GraphQL API for Cardano |
+| koios-mcp | [michaeljfazio/koios-mcp](https://github.com/michaeljfazio/koios-mcp) | MCP server exposing all 95 Koios endpoints to LLMs and AI agents |
 
 ### Client SDKs for APIs
 | Project | Language | Repo |
