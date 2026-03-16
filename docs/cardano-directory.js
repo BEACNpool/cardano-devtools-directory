@@ -17,6 +17,8 @@ const TOOLS_DATA = [
   { name: "Cardano HW CLI", category: "CLI & Node Tooling", language: "TypeScript", repo: "https://github.com/vacuumlabs/cardano-hw-cli", description: "Hardware wallet integration for cardano-cli", org: "Vacuumlabs" },
   { name: "SPO Scripts", category: "CLI & Node Tooling", language: "Bash", repo: "https://github.com/gitmachtl/scripts", description: "Comprehensive SPO management scripts with HW wallet support", org: "Martin Lang" },
   { name: "Guild Operators", category: "CLI & Node Tooling", language: "Bash", repo: "https://github.com/cardano-community/guild-operators", description: "CNTools, gLiveView, topology updater — essential SPO toolkit", org: "Community" },
+  { name: "cardano-node-mcp", category: "CLI & Node Tooling", language: "TypeScript", repo: "https://github.com/michaeljfazio/cardano-node-mcp", description: "MCP server for Cardano node CLI operations (cardano-cli + torsten-cli)", org: "michaeljfazio" },
+  { name: "koios-mcp", category: "CLI & Node Tooling", language: "TypeScript", repo: "https://github.com/michaeljfazio/koios-mcp", description: "MCP server for Koios API endpoints for agent/tool workflows", org: "michaeljfazio" },
 
   // Ledger & Formal Specs
   { name: "cardano-ledger", category: "Ledger & Formal Specs", language: "Haskell", repo: "https://github.com/IntersectMBO/cardano-ledger", description: "Formal specs, executable models, and ledger implementation", org: "IntersectMBO" },

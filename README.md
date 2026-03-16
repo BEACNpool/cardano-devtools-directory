@@ -31,6 +31,8 @@
 | CShell | Rust | [txpipe/cshell](https://github.com/txpipe/cshell) | Developer/power-user wallet CLI |
 | Cardano HW CLI | TypeScript | [vacuumlabs/cardano-hw-cli](https://github.com/vacuumlabs/cardano-hw-cli) | Hardware wallet integration for cardano-cli |
 | SPO Scripts | Bash | [gitmachtl/scripts](https://github.com/gitmachtl/scripts) | Comprehensive SPO management scripts with HW wallet support |
+| cardano-node-mcp | TypeScript | [michaeljfazio/cardano-node-mcp](https://github.com/michaeljfazio/cardano-node-mcp) | MCP server for Cardano node CLI operations (cardano-cli + torsten-cli) |
+| koios-mcp | TypeScript | [michaeljfazio/koios-mcp](https://github.com/michaeljfazio/koios-mcp) | MCP server for Koios API endpoints for agent/tool workflows |
 
 ### Ledger & Formal Specs
 | Project | Language | Repo | Description |
