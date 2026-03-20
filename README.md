@@ -102,6 +102,8 @@
 |---------|------|-------------|
 | cardano-client-lib | [bloxbean/cardano-client-lib](https://github.com/bloxbean/cardano-client-lib) | Java client with Blockfrost/Koios/Ogmios backends |
 | Yaci | [bloxbean/yaci](https://github.com/bloxbean/yaci) | Java mini-protocol implementation for cardano-node |
+| blockfrost-wrapper | [theeldermillenial/blockfrost-wrapper](https://github.com/theeldermillenial/blockfrost-wrapper) | Python wrapper for Blockfrost with rate-limit safeguards + typed models |
+| minswap-py | [theeldermillenial/minswap-py](https://github.com/theeldermillenial/minswap-py) | Python client for Minswap DEX on Cardano (deprecated, still usable) |
 
 ### Kotlin
 | Project | Repo | Description |
@@ -197,6 +199,7 @@
 | GovTool | [IntersectMBO/govtool](https://github.com/IntersectMBO/govtool) | DRep registration, delegation, and governance action voting |
 | Round Table | [ADAOcommunity](https://github.com/ADAOcommunity) | Open-source multi-sig wallet with DRep support |
 | SanchoNet | [sancho.network](https://sancho.network) | Dedicated governance testnet |
+| spo-governance-dashboard | [KtorZ/spo-governance-dashboard](https://github.com/KtorZ/spo-governance-dashboard) | Lightweight dashboard project for SPO governance workflows |
 | CIP-95 Wallet Bridge | Spec | Extends CIP-30 for governance dApp development |
 
 ---
@@ -219,6 +222,7 @@
 |---------|------|-------------|
 | cardano-addresses | [IntersectMBO/cardano-addresses](https://github.com/IntersectMBO/cardano-addresses) | Address derivation library (Bech32, Byron, Shelley) |
 | cardano-wallet | [cardano-foundation/cardano-wallet](https://github.com/cardano-foundation/cardano-wallet) | HTTP server + CLI for UTxO and HD wallet management |
+| wallet-prototype | [KtorZ/wallet-prototype](https://github.com/KtorZ/wallet-prototype) | Minimal viable wallet backend prototype (Haskell) |
 | Cardano Peer Connect | [fabianbormann/cardano-peer-connect](https://github.com/fabianbormann/cardano-peer-connect) | CIP-0045 WebRTC communication for dApps/wallets |
 | Cardano Signer | [gitmachtl/scripts](https://github.com/gitmachtl/scripts) | Sign/verify data, generate DRep and CC keys |
 

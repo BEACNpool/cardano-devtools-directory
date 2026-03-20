@@ -44,6 +44,8 @@ const TOOLS_DATA = [
   { name: "Cometa.py", category: "Off-Chain SDKs", language: "Python", repo: "https://github.com/Biglup/cometa.py", description: "High-performance Python lib for tx building and scripting", org: "Biglup" },
   { name: "kupo-py", category: "Off-Chain SDKs", language: "Python", repo: "https://github.com/theeldermillenial/kupo-py", description: "Async Python client for Kupo — type-safe Pydantic responses", org: "theeldermillenial" },
   { name: "dbsync-py", category: "Off-Chain SDKs", language: "Python", repo: "https://github.com/theeldermillenial/dbsync-py", description: "SQLModel ORM helpers for type-safe access to cardano-db-sync PostgreSQL", org: "theeldermillenial" },
+  { name: "blockfrost-wrapper", category: "Off-Chain SDKs", language: "Python", repo: "https://github.com/theeldermillenial/blockfrost-wrapper", description: "Python wrapper for Blockfrost with rate-limit safeguards + typed models", org: "theeldermillenial" },
+  { name: "minswap-py", category: "Off-Chain SDKs", language: "Python", repo: "https://github.com/theeldermillenial/minswap-py", description: "Python client for Minswap DEX on Cardano (deprecated, still usable)", org: "theeldermillenial" },
   { name: "charli3-dendrite", category: "Off-Chain SDKs", language: "Python", repo: "https://github.com/Charli3-Official/charli3-dendrite", description: "Python SDK for querying and swapping across Cardano DEXs (Minswap, SundaeSwap, WingRiders, and more)", org: "Charli3-Official" },
   { name: "Pallas", category: "Off-Chain SDKs", language: "Rust", repo: "https://github.com/txpipe/pallas", description: "Rust building blocks — chain sync, block parsing, serialization", org: "TxPipe" },
   { name: "Oura", category: "Off-Chain SDKs", language: "Rust", repo: "https://github.com/txpipe/oura", description: "Rust pipeline connecting to cardano-node tip for event streaming", org: "TxPipe" },
@@ -91,6 +93,7 @@ const TOOLS_DATA = [
   { name: "SanchoNet", category: "Governance", language: "Platform", repo: "https://sancho.network", description: "Dedicated governance testnet", org: "Community" },
   { name: "ChangWatch", category: "Governance", language: "Web", repo: "https://changwatch.com", description: "Vote threshold dashboard with live stake distribution", org: "Community" },
   { name: "Round Table", category: "Governance", language: "TypeScript", repo: "https://github.com/ADAOcommunity", description: "Open-source multi-sig wallet with DRep support", org: "ADAO" },
+  { name: "spo-governance-dashboard", category: "Governance", language: "JavaScript", repo: "https://github.com/KtorZ/spo-governance-dashboard", description: "Lightweight dashboard project for SPO governance workflows", org: "KtorZ" },
 
   // Explorers
   { name: "CExplorer", category: "Explorers", language: "Web", repo: "https://cexplorer.io", description: "Oldest and most-featured Cardano explorer", org: "CExplorer" },
@@ -102,6 +105,7 @@ const TOOLS_DATA = [
   { name: "cardano-wallet", category: "Wallet Infra", language: "Haskell", repo: "https://github.com/cardano-foundation/cardano-wallet", description: "HTTP server + CLI for UTxO and HD wallet management", org: "Cardano Foundation" },
   { name: "Veridian Wallet", category: "Wallet Infra", language: "TypeScript", repo: "https://github.com/cardano-foundation/veridian-wallet", description: "SSI wallet using KERI/ACDC protocols (CF project)", org: "Cardano Foundation" },
   { name: "cardano-addresses", category: "Wallet Infra", language: "Haskell", repo: "https://github.com/IntersectMBO/cardano-addresses", description: "Address derivation library (Bech32, Byron, Shelley)", org: "IntersectMBO" },
+  { name: "wallet-prototype", category: "Wallet Infra", language: "Haskell", repo: "https://github.com/KtorZ/wallet-prototype", description: "Minimal viable wallet backend prototype", org: "KtorZ" },
   { name: "Cardano Peer Connect", category: "Wallet Infra", language: "TypeScript", repo: "https://github.com/fabianbormann/cardano-peer-connect", description: "CIP-0045 WebRTC communication for dApps/wallets", org: "Community" },
   { name: "Cardano Signer", category: "Wallet Infra", language: "Bash", repo: "https://github.com/gitmachtl/scripts", description: "Sign/verify data, generate DRep and CC keys", org: "Martin Lang" },
 
