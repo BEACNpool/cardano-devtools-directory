@@ -95,6 +95,7 @@ const TOOLS_DATA = [
 
   // Governance
   { name: "GovTool", category: "Governance", language: "TypeScript", repo: "https://github.com/IntersectMBO/govtool", description: "DRep registration, delegation, and governance action voting", org: "IntersectMBO" },
+  { name: "exegesis", category: "Governance", language: "Rust", repo: "https://github.com/nixedge/exegesis", description: "CLI companion for Ekklesia — manage Cardano governance votes, proposals, auth, and markdown proposal workflows", org: "NixEdge" },
   { name: "SanchoNet", category: "Governance", language: "Platform", repo: "https://sancho.network", description: "Dedicated governance testnet", org: "Community" },
   { name: "ChangWatch", category: "Governance", language: "Web", repo: "https://changwatch.com", description: "Vote threshold dashboard with live stake distribution", org: "Community" },
 
