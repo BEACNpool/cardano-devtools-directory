@@ -20,7 +20,11 @@ const TOOLS_DATA = [
   { name: "plutus", category: "Ledger & Formal Specs", language: "Haskell", repo: "https://github.com/IntersectMBO/plutus", description: "Plutus Core compiler and language implementation", org: "IntersectMBO" },
 
   // Smart Contract Languages
-  { name: "Aiken", category: "Smart Contracts", language: "Rust/Aiken", repo: "https://github.com/aiken-lang/aiken", description: "Purpose-built smart contract language (compiles to UPLC)", org: "Pragma" },
+  { name: "Aiken", category: "Smart Contracts", language: "Rust/Aiken", repo: "https://github.com/aiken-lang/aiken", description: "Modern smart contract language and compiler for Cardano (compiles to UPLC)", org: "Aiken" },
+  { name: "Aiken Standard Library", category: "Smart Contracts", language: "Aiken", repo: "https://github.com/aiken-lang/stdlib", description: "Official Aiken standard library, written and checked in Aiken", org: "Aiken" },
+  { name: "Awesome Aiken", category: "Smart Contracts", language: "Markdown", repo: "https://github.com/aiken-lang/awesome-aiken", description: "Curated index of Aiken libraries, dApps, tutorials, and ecosystem resources", org: "Aiken" },
+  { name: "Aiken Package Registry", category: "Smart Contracts", language: "JavaScript", repo: "https://github.com/aiken-lang/aiken-package-registry-page", description: "Package discovery UI for Aiken smart contract libraries", org: "Aiken" },
+  { name: "Aiken Fuzz", category: "Smart Contracts", language: "Aiken", repo: "https://github.com/aiken-lang/fuzz", description: "Property-based fuzz testing helpers for Aiken code", org: "Aiken" },
   { name: "Plutarch", category: "Smart Contracts", language: "Haskell", repo: "https://github.com/Plutonomicon/plutarch-plutus", description: "Typed eDSL for writing Plutus scripts in Haskell", org: "Plutonomicon" },
   { name: "Opshin", category: "Smart Contracts", language: "Python", repo: "https://github.com/OpShin/opshin", description: "Write Cardano smart contracts in Python", org: "OpShin" },
   { name: "Plu-ts", category: "Smart Contracts", language: "TypeScript", repo: "https://github.com/HarmonicLabs/plu-ts", description: "TypeScript-embedded Cardano smart contract language", org: "Harmonic Labs" },
@@ -82,6 +86,12 @@ const TOOLS_DATA = [
   { name: "Yaci DevKit", category: "Dev Environments", language: "Java", repo: "https://github.com/bloxbean/yaci-devkit", description: "Local Cardano devnet for development and testing", org: "BloxBean" },
   { name: "Atlas", category: "Dev Environments", language: "Haskell", repo: "https://github.com/geniusyield/atlas", description: "Haskell framework for off-chain code with test harness", org: "Genius Yield" },
   { name: "Vodka", category: "Dev Environments", language: "Aiken", repo: "https://github.com/Anastasia-Labs/vodka", description: "Aiken testing library for smart contract validation", org: "Anastasia Labs" },
+  { name: "setup-aiken", category: "Dev Environments", language: "JavaScript", repo: "https://github.com/aiken-lang/setup-aiken", description: "GitHub Action for installing Aiken in CI workflows", org: "Aiken" },
+  { name: "aikup", category: "Dev Environments", language: "Rust", repo: "https://github.com/aiken-lang/aikup", description: "Version manager for installing and switching between Aiken releases", org: "Aiken" },
+  { name: "vscode-aiken", category: "Dev Environments", language: "TypeScript", repo: "https://github.com/aiken-lang/vscode-aiken", description: "Aiken language support for Visual Studio Code", org: "Aiken" },
+  { name: "zed-aiken", category: "Dev Environments", language: "Rust", repo: "https://github.com/aiken-lang/zed-aiken", description: "Aiken language support for the Zed editor", org: "Aiken" },
+  { name: "editor-integration-nvim", category: "Dev Environments", language: "Vim Script", repo: "https://github.com/aiken-lang/editor-integration-nvim", description: "Aiken language support for Vim and Neovim", org: "Aiken" },
+  { name: "aiken-mode", category: "Dev Environments", language: "Emacs Lisp", repo: "https://github.com/aiken-lang/aiken-mode", description: "Aiken major mode for Emacs", org: "Aiken" },
 
   // Governance
   { name: "GovTool", category: "Governance", language: "TypeScript", repo: "https://github.com/IntersectMBO/govtool", description: "DRep registration, delegation, and governance action voting", org: "IntersectMBO" },
@@ -148,6 +158,9 @@ const LANG_COLORS = {
   "Scala": "#c22d40",
   "Rust/Aiken": "#00d4aa",
   "Aiken": "#00d4aa",
+  "Markdown": "#94a3b8",
+  "Vim Script": "#199f4b",
+  "Emacs Lisp": "#c678dd",
   "PHP": "#4F5D95",
   "API": "#0ea5e9",
   "Web": "#64748b",
