@@ -1035,7 +1035,8 @@ $("stat-strip").innerHTML = [
 
 {
   const recent = TOOLS_DATA.filter(t => t.new).slice(-4).reverse();
-  $("mast-side").innerHTML = `
+  if (!recent.length) $("mast-side").hidden = true;
+  else $("mast-side").innerHTML = `
     <div class="side-title">Recently added <button type="button" data-flag="new">all ${newCount} →</button></div>
     ${recent.map(t => `
       <div class="mast-item">

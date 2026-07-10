@@ -79,7 +79,6 @@ const TOOLS_DATA = [
   { name: "CardanoBI", category: "API Providers", language: "API", repo: "https://cardanobi.io", description: "Open-source business intelligence API layer", org: "CardanoBI" },
   { name: "Blockfrost RYO", category: "API Providers", language: "TypeScript", repo: "https://github.com/blockfrost/blockfrost-backend-ryo", description: "Run your own Blockfrost backend", org: "Blockfrost" },
   { name: "cardano-graphql", category: "API Providers", language: "TypeScript", repo: "https://github.com/cardano-foundation/cardano-graphql", description: "GraphQL API for Cardano", org: "Cardano Foundation" },
-  { name: "koios-mcp", category: "API Providers", language: "TypeScript", repo: "https://github.com/michaeljfazio/koios-mcp", description: "MCP server exposing all 95 Koios endpoints to LLMs and AI agents", org: "michaeljfazio" },
 
   // Scaling
   { name: "Hydra", category: "Scaling", language: "Haskell", repo: "https://github.com/cardano-scaling/hydra", description: "Layer 2 state channels for low-latency, high-throughput tx", org: "Cardano Scaling" },
@@ -132,7 +131,46 @@ const TOOLS_DATA = [
   // Oracles
   { name: "Charli3", category: "Oracles", language: "Platform", repo: "https://charli3.io", description: "Decentralized oracle network for Cardano", org: "Charli3" },
   { name: "Orcfax", category: "Oracles", language: "Platform", repo: "https://orcfax.io", description: "Decentralized oracle with inter-node vetoing", org: "Orcfax" },
+
+  // 2026 additions — sourced from the Cardano Developer Portal and upstream projects
+  { name: "Evolution SDK", category: "Off-Chain SDKs", language: "TypeScript", repo: "https://github.com/evolution-sdk/evolution-sdk", description: "Pure TypeScript transaction and off-chain SDK with no WebAssembly dependency", org: "Evolution SDK", featured: true },
+  { name: "Cardano Transaction Library", category: "Off-Chain SDKs", language: "PureScript", repo: "https://github.com/Plutonomicon/cardano-transaction-lib", description: "PureScript framework for building Cardano transactions in Node.js and browsers", org: "Plutonomicon" },
+  { name: "CardanoKit", category: "Off-Chain SDKs", language: "Swift", repo: "https://github.com/Kingpin-Apps/cardano-swift", description: "Swift toolkit for HD wallets, addresses, signing, and transactions on Apple platforms", org: "Kingpin Apps", new: true },
+  { name: "hydra-sdk", category: "Scaling", language: "TypeScript", repo: "https://github.com/cardano-scaling/hydra-sdk", description: "SDK for wallet apps that manage Hydra Heads and build Layer 2 transactions", org: "Cardano Scaling", new: true },
+  { name: "Pebble", category: "Smart Contracts", language: "TypeScript", repo: "https://github.com/edmund-hsiao/pebble", description: "Functional Cardano smart-contract DSL embedded in TypeScript", org: "Community", new: true },
+  { name: "plutus-halo2-verifier-gen", category: "Smart Contracts", language: "Rust", repo: "https://github.com/pragma-org/plutus-halo2-verifier-gen", description: "Generates Plinth or Aiken verifiers for Halo2 zero-knowledge proofs", org: "Pragma", new: true },
+  { name: "gnark-cardano", category: "Smart Contracts", language: "Go", repo: "https://github.com/Salvionied/gnark-cardano", description: "Build Groth16 circuits in Go and verify their proofs in an Aiken validator", org: "Community", new: true },
+  { name: "Cardano Connect with Wallet", category: "Wallet Infra", language: "TypeScript", repo: "https://github.com/cardano-foundation/cardano-connect-with-wallet", description: "React hooks and components for CIP-30 and CIP-45 wallet connections", org: "Cardano Foundation", featured: true },
+  { name: "Weld", category: "Wallet Infra", language: "TypeScript", repo: "https://github.com/Cardano-Forge/weld", description: "Headless wallet-connection library for Cardano dApps", org: "Cardano Forge" },
+  { name: "UTxOS", category: "Wallet Infra", language: "TypeScript", repo: "https://utxos.dev", description: "Non-custodial wallet-as-a-service with social-login onboarding", org: "UTxOS" },
+  { name: "Cardano Node API", category: "API Providers", language: "Go", repo: "https://github.com/blinklabs-io/cardano-node-api", description: "Expose a local Cardano node through REST and UTxO-RPC gRPC APIs", org: "Blink Labs", new: true },
+  { name: "UTxORPC", category: "API Providers", language: "gRPC", repo: "https://github.com/utxorpc/spec", description: "Shared gRPC interface specification for UTxO blockchains", org: "UTxO RPC" },
+  { name: "NFTCDN", category: "API Providers", language: "API", repo: "https://nftcdn.io", description: "Media delivery and transformation API for Cardano NFTs and tokens", org: "NFTCDN", new: true },
+  { name: "Gastronomy", category: "Testing & Debugging", language: "Rust", repo: "https://github.com/pragma-org/gastronomy", description: "Step forward and backward through UPLC smart-contract execution", org: "Pragma", featured: true, new: true },
+  { name: "Lace Anatomy", category: "Testing & Debugging", language: "TypeScript", repo: "https://laceanatomy.com", description: "Decode and visualize Cardano addresses, CBOR, and transactions", org: "Input Output", featured: true, new: true },
+  { name: "Cardano Dev Wallet", category: "Testing & Debugging", language: "TypeScript", repo: "https://github.com/input-output-hk/cardano-dev-wallet", description: "Developer browser wallet with CIP-30 logging and custom-network support", org: "Input Output", new: true },
+  { name: "Sorbet", category: "Testing & Debugging", language: "TypeScript", repo: "https://github.com/Emurgo/sorbet", description: "Mock browser wallet for testing dApp CIP-30 flows", org: "Emurgo", new: true },
+  { name: "Datum Explorer", category: "Testing & Debugging", language: "TypeScript", repo: "https://github.com/Biglup/cardano-datum-explorer", description: "Decode CBOR datums into readable fields with CDDL schemas", org: "Biglup", new: true },
+  { name: "cardano-testnet", category: "Dev Environments", language: "Haskell", repo: "https://github.com/IntersectMBO/cardano-node", description: "Official local-cluster tool with full genesis and protocol-parameter control", org: "IntersectMBO", new: true },
+  { name: "ZhuLi", category: "Governance", language: "Aiken", repo: "https://github.com/SundaeSwap-finance/zhuli", description: "Validator and CLI for separating hot and cold DRep authority", org: "Sundae Labs", new: true },
 ];
+
+const CATEGORY_CAPABILITIES = {
+  "Node Implementations": ["Run a node", "Query the chain"], "CLI & Node Tooling": ["Run a node", "Operate a pool"],
+  "Ledger & Formal Specs": ["Research the protocol"], "Smart Contracts": ["Write smart contracts"],
+  "Off-Chain SDKs": ["Build transactions", "Build a dApp"], "Indexers": ["Index on-chain data", "Query the chain"],
+  "API Providers": ["Query the chain", "Submit transactions"], "Scaling": ["Build Layer 2"],
+  "Dev Environments": ["Test locally", "Learn Cardano"], "Governance": ["Build governance tools"],
+  "Explorers": ["Inspect transactions"], "Wallet Infra": ["Integrate a wallet"],
+  "NFT & Tokens": ["Mint tokens & NFTs"], "Enterprise": ["Integrate Cardano"], "Oracles": ["Use oracle data"],
+  "Testing & Debugging": ["Test & debug"]
+};
+
+for (const tool of TOOLS_DATA) {
+  tool.capabilities ||= CATEGORY_CAPABILITIES[tool.category] || [tool.category];
+  tool.level ||= ["Explorers", "API Providers", "Dev Environments", "NFT & Tokens"].includes(tool.category) ? "Beginner friendly" : "Technical";
+  tool.delivery ||= /^https?:\/\/github\.com/.test(tool.repo) ? "Open source" : "Hosted service";
+}
 
 // ── Group by category → { "Category": [ {name, description, repo, tags:[lang], org} ] }
 const directory = {};
@@ -143,7 +181,8 @@ for (const t of TOOLS_DATA) {
     description: t.description,
     repo: t.repo,
     tags: [t.language],
-    org: t.org,
+    org: t.org, category: t.category, language: t.language, capabilities: t.capabilities,
+    level: t.level, delivery: t.delivery, featured: t.featured, new: t.new,
   });
 }
 
