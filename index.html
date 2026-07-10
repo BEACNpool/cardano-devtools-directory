@@ -4,29 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Watchtower — Cardano Developer Tools Directory</title>
-<meta name="description" content="AI-curated Cardano developer tools directory. Signal through the noise. By BEACNpool × OpenClaw.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta name="description" content="A searchable database of Cardano developer tools — nodes, SDKs, smart contract languages, indexers, APIs, and more. Curated by BEACNpool × OpenClaw.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0f14'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%2322d3ee'/%3E%3Ccircle cx='16' cy='16' r='9.5' fill='none' stroke='%2322d3ee' stroke-opacity='.35' stroke-width='2'/%3E%3C/svg%3E">
 <style>
   :root {
-    --cyan: #00e5ff;
-    --cyan-dim: #00a5b8;
-    --amber: #ffb300;
-    --amber-dim: #b87a00;
-    --green: #39ff14;
-    --red: #e53935;
-    --bg-deep: #0a0c10;
-    --bg-card: #0f1218;
-    --bg-card-hover: #141920;
-    --bg-surface: #1a1f2a;
-    --border: #1e2636;
-    --border-hover: #2a3448;
-    --text: #e0e6f0;
-    --text-dim: #7a8599;
-    --text-muted: #4a5568;
-    --font-display: 'Oxanium', sans-serif;
-    --font-body: 'Outfit', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
+    --bg0: #07090c;
+    --bg1: #0c0f14;
+    --bg2: #11151c;
+    --bg3: #161b24;
+    --line: #1c222d;
+    --line2: #2b3444;
+    --text: #e6ebf4;
+    --dim: #939eb1;
+    --mute: #5c6779;
+    --accent: #22d3ee;
+    --accent-soft: rgba(34,211,238,0.12);
+    --accent-line: rgba(34,211,238,0.38);
+    --amber: #fbbf24;
+    --amber-soft: rgba(251,191,36,0.12);
+    --violet: #a78bfa;
+    --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+    --r-card: 12px;
+    --r-input: 8px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -34,779 +34,1060 @@
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--bg-deep);
+    background: var(--bg0);
     color: var(--text);
-    font-family: var(--font-body);
-    line-height: 1.6;
-    overflow-x: hidden;
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
   }
 
-  /* ─── AMBIENT BACKGROUND ─── */
   body::before {
     content: '';
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    inset: 0;
     background:
-      radial-gradient(ellipse 800px 600px at 20% 10%, rgba(0,229,255,0.04) 0%, transparent 70%),
-      radial-gradient(ellipse 600px 800px at 80% 80%, rgba(255,179,0,0.03) 0%, transparent 70%);
+      radial-gradient(900px 420px at 75% -80px, rgba(34,211,238,0.055), transparent 70%),
+      radial-gradient(700px 500px at -10% 30%, rgba(167,139,250,0.03), transparent 70%);
     pointer-events: none;
-    z-index: 0;
+    z-index: -1;
   }
 
-  /* ─── GRID OVERLAY ─── */
-  .grid-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-image:
-      linear-gradient(rgba(0,229,255,0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,229,255,0.015) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-    z-index: 0;
+  ::selection { background: rgba(34,211,238,0.25); }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  button { font-family: inherit; }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 
-  /* ─── NAVBAR ─── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    background: rgba(10,12,16,0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
-    transition: all 0.3s ease;
+  mark {
+    background: var(--amber-soft);
+    color: var(--amber);
+    border-radius: 3px;
+    padding: 0 1px;
   }
 
-  nav .nav-inner {
-    max-width: 1200px;
+  /* ── Topbar ─────────────────────────────────────────── */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(7,9,12,0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .topbar-inner {
+    max-width: 1280px;
     margin: 0 auto;
+    padding: 0 20px;
+    height: 56px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    height: 72px;
+    gap: 16px;
   }
 
   .brand {
     display: flex;
     align-items: center;
-    gap: 0.9rem;
-    text-decoration: none;
+    gap: 10px;
     color: var(--text);
-    font-family: var(--font-display);
     font-weight: 700;
-    letter-spacing: 0.04em;
-    font-size: 1.05rem;
-  }
-
-  .brand .dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: var(--cyan);
-    box-shadow: 0 0 16px rgba(0,229,255,0.8);
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 1.2rem;
-    align-items: center;
-    font-size: 0.95rem;
-  }
-
-  .nav-links a {
-    color: var(--text-dim);
-    text-decoration: none;
-    transition: all 0.2s ease;
-    font-weight: 500;
-  }
-
-  .nav-links a:hover {
-    color: var(--cyan);
-    text-shadow: 0 0 12px rgba(0,229,255,0.6);
-  }
-
-  .cta {
-    padding: 0.55rem 0.95rem;
-    border: 1px solid rgba(0,229,255,0.35);
-    border-radius: 10px;
-    background: rgba(0,229,255,0.05);
-    color: var(--cyan) !important;
-    font-weight: 600;
-  }
-
-  .cta:hover {
-    background: rgba(0,229,255,0.1);
-    border-color: rgba(0,229,255,0.55);
-  }
-
-  /* ─── HERO ─── */
-  header {
-    position: relative;
-    z-index: 1;
-    padding: 140px 2rem 80px;
-  }
-
-  .hero {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 3rem;
-    align-items: center;
-  }
-
-  .hero h1 {
-    font-family: var(--font-display);
-    font-size: clamp(2.3rem, 4vw, 3.3rem);
-    line-height: 1.1;
-    letter-spacing: 0.01em;
-    margin-bottom: 1rem;
-  }
-
-  .hero h1 .accent {
-    color: var(--cyan);
-    text-shadow:
-      0 0 18px rgba(0,229,255,0.45),
-      0 0 38px rgba(0,229,255,0.18);
-  }
-
-  .hero p {
-    color: var(--text-dim);
-    font-size: 1.1rem;
-    max-width: 52ch;
-    margin-bottom: 1.4rem;
-  }
-
-  .hero .sub {
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    color: rgba(122,133,153,0.9);
-  }
-
-  .badge-wrap {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .badge-glow {
-    position: absolute;
-    width: 320px;
-    height: 320px;
-    border-radius: 50%;
-    background:
-      radial-gradient(circle at 30% 30%, rgba(0,229,255,0.25) 0%, transparent 60%),
-      radial-gradient(circle at 70% 70%, rgba(255,179,0,0.18) 0%, transparent 60%);
-    filter: blur(10px);
-    animation: pulse 4.8s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 0.75; }
-    50% { transform: scale(1.06); opacity: 1; }
-  }
-
-  .badge {
-    width: min(340px, 86%);
-    height: auto;
-    border-radius: 22px;
-    box-shadow:
-      0 0 0 1px rgba(0,229,255,0.2),
-      0 18px 70px rgba(0,0,0,0.65),
-      0 0 40px rgba(0,229,255,0.2);
-    transform: translateZ(0);
-  }
-
-  /* ─── STATS ─── */
-  .stats {
-    max-width: 1200px;
-    margin: 2.6rem auto 0;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-  }
-
-  .stat {
-    background: rgba(15,18,24,0.7);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 1rem 1.1rem;
-    backdrop-filter: blur(10px);
-  }
-
-  .stat .k {
-    font-family: var(--font-mono);
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    margin-bottom: 0.35rem;
-  }
-
-  .stat .v {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 1.35rem;
+    font-size: 0.9375rem;
     letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .brand:hover { text-decoration: none; }
+
+  .brand-mark {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    background: var(--bg2);
+    border: 1px solid var(--line2);
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+  .brand-mark::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px rgba(34,211,238,0.7);
   }
 
-  .stat .v.cyan { color: var(--cyan); }
-  .stat .v.amber { color: var(--amber); }
+  .brand small {
+    color: var(--mute);
+    font-weight: 500;
+    font-size: 0.8125rem;
+    display: inline-block;
+  }
 
-  /* ─── MAIN ─── */
-  main {
+  .topbar-search {
+    flex: 1;
+    min-width: 0;
+    max-width: 460px;
+    margin-left: auto;
     position: relative;
-    z-index: 1;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem 90px;
-  }
-
-  .section-head {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 1rem;
-    margin: 3.4rem 0 1.4rem;
+    align-items: center;
   }
 
-  .section-head h2 {
-    font-family: var(--font-display);
-    font-size: 1.55rem;
-    letter-spacing: 0.03em;
+  .topbar-search svg {
+    position: absolute;
+    left: 10px;
+    width: 14px; height: 14px;
+    color: var(--mute);
+    pointer-events: none;
   }
 
-  .section-head p {
-    color: var(--text-dim);
-    max-width: 65ch;
-    font-size: 0.98rem;
-  }
-
-  .controls {
-    display: grid;
-    gap: 0.8rem;
-    margin-bottom: 1rem;
-  }
-
-  .search-row {
-    display: flex;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-  }
-
-  .search-input {
-    flex: 1 1 320px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    background: rgba(15,18,24,0.7);
+  .topbar-search input {
+    width: 100%;
+    height: 34px;
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-input);
     color: var(--text);
-    padding: 0.7rem 0.85rem;
-    font-family: var(--font-body);
+    font-family: var(--sans);
+    font-size: 0.875rem;
+    padding: 0 60px 0 32px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
-
-  .search-input:focus {
+  .topbar-search input::placeholder { color: var(--mute); }
+  .topbar-search input:focus {
     outline: none;
-    border-color: rgba(0,229,255,0.45);
-    box-shadow: 0 0 0 3px rgba(0,229,255,0.15);
+    border-color: var(--accent-line);
+    box-shadow: 0 0 0 3px var(--accent-soft);
   }
 
-  .btn {
-    border: 1px solid var(--border);
-    background: rgba(15,18,24,0.8);
-    color: var(--text-dim);
-    border-radius: 10px;
-    padding: 0.62rem 0.8rem;
-    cursor: pointer;
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
+  .kbd-hint {
+    position: absolute;
+    right: 8px;
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--mute);
+    border: 1px solid var(--line2);
+    border-radius: 5px;
+    padding: 1px 6px;
+    background: var(--bg1);
+    pointer-events: none;
   }
 
-  .btn:hover {
-    color: var(--cyan);
-    border-color: rgba(0,229,255,0.35);
-  }
-
-  .chip-row {
+  .topbar-links {
     display: flex;
-    gap: 0.45rem;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
   }
 
-  .chip {
-    border: 1px solid var(--border);
-    background: rgba(26,31,42,0.5);
-    color: var(--text-dim);
-    border-radius: 999px;
-    padding: 0.3rem 0.66rem;
-    font-size: 0.75rem;
-    font-family: var(--font-mono);
-    cursor: pointer;
+  .gh-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid var(--line2);
+    border-radius: var(--r-input);
+    color: var(--text);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    transition: border-color 0.15s ease, background 0.15s ease;
   }
+  .gh-link:hover { text-decoration: none; border-color: var(--accent-line); background: var(--accent-soft); }
+  .gh-link svg { width: 15px; height: 15px; }
 
-  .chip.active {
-    color: var(--cyan);
-    border-color: rgba(0,229,255,0.42);
-    background: rgba(0,229,255,0.09);
-  }
-
-  .helper-text {
-    color: var(--text-dim);
-    font-size: 0.88rem;
-  }
-
-  /* ─── TOOL GRID ─── */
-  .tool-grid {
+  /* ── Masthead ───────────────────────────────────────── */
+  .masthead {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 44px 20px 28px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.1rem;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 36px;
+    align-items: end;
+  }
+
+  .mast-side {
+    background: var(--bg1);
+    border: 1px solid var(--line);
+    border-radius: var(--r-card);
+    padding: 14px 16px 8px;
+  }
+
+  .mast-side .side-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--mute);
+    margin-bottom: 4px;
+  }
+  .mast-side .side-title button {
+    border: 0; background: transparent;
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    text-transform: none;
+  }
+  .mast-side .side-title button:hover { text-decoration: underline; }
+
+  .mast-item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 7px 0;
+    border-top: 1px solid var(--line);
+    min-width: 0;
+  }
+  .mast-item:first-of-type { border-top: 0; }
+  .mast-item a {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.8438rem;
+    white-space: nowrap;
+  }
+  .mast-item a:hover { color: var(--accent); text-decoration: none; }
+  .mast-item .o {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--mute);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 960px) {
+    .masthead { grid-template-columns: 1fr; gap: 0; }
+    .mast-side { display: none; }
+  }
+
+  .masthead h1 {
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .masthead h1 .accent { color: var(--accent); }
+
+  .masthead .tagline {
+    margin-top: 8px;
+    color: var(--dim);
+    font-size: 0.9875rem;
+    max-width: 62ch;
+  }
+
+  .stat-strip {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 0;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--mute);
+  }
+  .stat-strip b { color: var(--text); font-weight: 600; }
+  .stat-strip span + span::before { content: '·'; color: var(--line2); margin: 0 12px; }
+
+  /* ── App layout ─────────────────────────────────────── */
+  .app {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+    display: grid;
+    grid-template-columns: 218px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+  }
+
+  /* ── Sidebar ────────────────────────────────────────── */
+  .sidebar {
+    min-width: 0;
+    position: sticky;
+    top: 72px;
+    max-height: calc(100vh - 88px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line2) transparent;
+    padding-bottom: 8px;
+  }
+
+  .side-label {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--mute);
+    margin: 18px 0 8px 10px;
+  }
+  .sidebar .side-label:first-child { margin-top: 4px; }
+
+  .cat-list { display: flex; flex-direction: column; gap: 1px; }
+
+  .cat-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    padding: 6px 10px;
+    background: transparent;
+    border: 0;
+    border-radius: 7px;
+    color: var(--dim);
+    font-size: 0.8438rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+  .cat-btn:hover { background: var(--bg2); color: var(--text); }
+  .cat-btn.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+
+  .cat-btn .n {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--mute);
+  }
+  .cat-btn.active .n { color: var(--accent); opacity: 0.8; }
+  .cat-btn.zero { opacity: 0.38; }
+
+  .flag-row { display: flex; flex-direction: column; gap: 1px; }
+
+  /* ── Toolbar ────────────────────────────────────────── */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 2px 0 14px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 22px;
+  }
+
+  .result-count {
+    font-size: 0.8438rem;
+    color: var(--dim);
+  }
+  .result-count b { color: var(--text); }
+
+  .clear-btn {
+    border: 0;
+    background: transparent;
+    color: var(--accent);
+    font-size: 0.8125rem;
+    cursor: pointer;
+    padding: 2px 4px;
+  }
+  .clear-btn:hover { text-decoration: underline; }
+
+  .toolbar-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  select.lang-select {
+    height: 32px;
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-input);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 0.8125rem;
+    padding: 0 8px;
+    cursor: pointer;
+    max-width: 180px;
+  }
+  select.lang-select:focus {
+    outline: none;
+    border-color: var(--accent-line);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .view-toggle {
+    display: flex;
+    border: 1px solid var(--line);
+    border-radius: var(--r-input);
+    overflow: hidden;
+  }
+  .view-toggle button {
+    width: 34px; height: 32px;
+    background: var(--bg2);
+    border: 0;
+    color: var(--mute);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+  .view-toggle button + button { border-left: 1px solid var(--line); }
+  .view-toggle button.active { background: var(--accent-soft); color: var(--accent); }
+  .view-toggle button:hover:not(.active) { color: var(--text); }
+  .view-toggle svg { width: 14px; height: 14px; }
+
+  /* ── Sections & cards ───────────────────────────────── */
+  .cat-section { margin-bottom: 34px; }
+
+  .cat-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .cat-head h2 {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .cat-head .n {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--mute);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(272px, 1fr));
+    gap: 12px;
   }
 
   .card {
     position: relative;
-    background: rgba(15,18,24,0.7);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 1.2rem 1.2rem 1.05rem;
-    transition: all 0.22s ease;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg1);
+    border: 1px solid var(--line);
+    border-radius: var(--r-card);
+    padding: 14px 15px 13px;
+    transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
   }
-
   .card:hover {
-    transform: translateY(-2px);
-    background: rgba(20,25,32,0.85);
-    border-color: rgba(0,229,255,0.22);
-    box-shadow: 0 16px 50px rgba(0,0,0,0.55);
+    border-color: var(--line2);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
   }
+  .card:hover .card-name { color: var(--accent); }
+  .card:focus-within { border-color: var(--accent-line); }
 
-  .card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(600px 200px at 30% 0%, rgba(0,229,255,0.08), transparent 60%);
-    opacity: 0;
-    transition: opacity 0.22s ease;
-    pointer-events: none;
-  }
+  .card.featured { border-color: rgba(34,211,238,0.28); }
+  .card.featured:hover { border-color: var(--accent-line); }
 
-  .card:hover::before { opacity: 1; }
-
-  .card h3 {
-    font-family: var(--font-display);
-    font-size: 1.05rem;
-    margin-bottom: 0.4rem;
-    letter-spacing: 0.02em;
-  }
-
-  .card p {
-    color: var(--text-dim);
-    font-size: 0.95rem;
-    margin-bottom: 0.85rem;
-    min-height: 2.9em;
-  }
-
-  .tags {
+  .card-meta {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem;
-    margin-bottom: 0.9rem;
-  }
-
-  .tag {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    padding: 0.22rem 0.5rem;
-    border-radius: 999px;
-    border: 1px solid rgba(42,52,72,0.9);
-    color: rgba(224,230,240,0.85);
-    background: rgba(26,31,42,0.55);
-  }
-
-  .tag.cyan { border-color: rgba(0,229,255,0.25); color: rgba(0,229,255,0.85); }
-  .tag.amber { border-color: rgba(255,179,0,0.22); color: rgba(255,179,0,0.85); }
-
-  .links {
-    display: flex;
-    gap: 0.8rem;
-    flex-wrap: wrap;
     align-items: center;
+    gap: 7px;
+    margin-bottom: 7px;
+    min-height: 18px;
   }
 
-  .links a {
-    color: var(--cyan);
-    text-decoration: none;
-    font-size: 0.92rem;
-    font-weight: 600;
+  .lang-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex: none;
   }
 
-  .links a:hover { text-decoration: underline; }
-
-  /* ─── COLLAPSIBLES ─── */
-  details {
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    background: rgba(15,18,24,0.55);
-    margin-bottom: 1.2rem;
+  .card-org {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--mute);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  summary {
-    list-style: none;
-    cursor: pointer;
-    padding: 1rem 1.1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    user-select: none;
-  }
-
-  summary::-webkit-details-marker { display: none; }
-
-  .summary-left {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .chev {
-    width: 10px;
-    height: 10px;
-    border-right: 2px solid rgba(224,230,240,0.6);
-    border-bottom: 2px solid rgba(224,230,240,0.6);
-    transform: rotate(-45deg);
-    transition: transform 0.2s ease;
-  }
-
-  details[open] .chev { transform: rotate(45deg); }
-
-  .pill {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: rgba(122,133,153,0.9);
-    border: 1px solid rgba(42,52,72,0.8);
-    padding: 0.18rem 0.55rem;
+  .badge {
+    margin-left: auto;
+    flex: none;
+    font-family: var(--mono);
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 1px 7px;
     border-radius: 999px;
   }
+  .badge.new { color: var(--amber); border: 1px solid rgba(251,191,36,0.4); background: var(--amber-soft); }
+  .badge.feat { color: var(--accent); border: 1px solid var(--accent-line); background: var(--accent-soft); }
+  .badge.new + .badge.feat { margin-left: 4px; }
 
-  .panel {
-    padding: 0.2rem 1.1rem 1.2rem;
+  .card-name {
+    font-size: 0.9688rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    transition: color 0.15s ease;
+  }
+  .card-name a { color: inherit; }
+  .card-name a::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-card); }
+  .card-name a:hover { text-decoration: none; }
+
+  .card-desc {
+    margin-top: 5px;
+    color: var(--dim);
+    font-size: 0.8438rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
   }
 
-  /* ─── FOOTER ─── */
-  footer {
-    border-top: 1px solid var(--border);
-    background: rgba(10,12,16,0.7);
-    padding: 2.2rem 2rem;
-    color: var(--text-dim);
+  .card-foot {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 0.7188rem;
+    color: var(--mute);
+  }
+
+  .card-foot .dest {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--mute);
+    transition: color 0.15s ease;
+  }
+  .card:hover .card-foot .dest { color: var(--accent); }
+  .card-foot .dest svg { width: 12px; height: 12px; }
+
+  /* ── List view ──────────────────────────────────────── */
+  .rows { display: flex; flex-direction: column; }
+
+  .row {
     position: relative;
-    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(150px, 190px) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 9px 12px;
+    border: 1px solid transparent;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    transition: background 0.12s ease;
+  }
+  .rows .row:first-child { border-top: 1px solid var(--line); }
+  .row:hover { background: var(--bg1); }
+  .row:hover .row-name { color: var(--accent); }
+
+  .row-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    transition: color 0.15s ease;
+  }
+  .row-name a { color: inherit; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .row-name a::after { content: ''; position: absolute; inset: 0; }
+  .row-name a:hover { text-decoration: none; }
+
+  .row-desc {
+    color: var(--dim);
+    font-size: 0.8438rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  footer .inner {
-    max-width: 1200px;
+  .row-side {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 0.7188rem;
+    color: var(--mute);
+    white-space: nowrap;
+  }
+
+  /* ── Empty state ────────────────────────────────────── */
+  .empty {
+    border: 1px dashed var(--line2);
+    border-radius: var(--r-card);
+    padding: 48px 20px;
+    text-align: center;
+    color: var(--dim);
+  }
+  .empty b { color: var(--text); }
+  .empty .hint-chips {
+    margin-top: 14px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .hint-chip {
+    border: 1px solid var(--line2);
+    background: var(--bg2);
+    color: var(--dim);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: border-color 0.12s ease, color 0.12s ease;
+  }
+  .hint-chip:hover { border-color: var(--accent-line); color: var(--accent); }
+
+  /* ── Contribute card ────────────────────────────────── */
+  .contribute {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 6px;
+    border: 1px dashed var(--line2);
+    background: transparent;
+    border-radius: var(--r-card);
+    padding: 14px 15px;
+    color: var(--dim);
+    font-size: 0.8438rem;
+    transition: border-color 0.15s ease;
+  }
+  .contribute:hover { border-color: var(--accent-line); text-decoration: none; }
+  .contribute b { color: var(--text); font-size: 0.9375rem; }
+  .contribute span { color: var(--accent); }
+
+  /* ── Footer ─────────────────────────────────────────── */
+  footer {
+    border-top: 1px solid var(--line);
+    background: var(--bg1);
+  }
+  .footer-inner {
+    max-width: 1280px;
     margin: 0 auto;
+    padding: 32px 20px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 20px;
     flex-wrap: wrap;
-    gap: 1rem;
+    color: var(--dim);
+    font-size: 0.8438rem;
+  }
+  .footer-inner .about { max-width: 60ch; }
+  .footer-inner .about b { color: var(--text); }
+  .footer-links { display: flex; gap: 18px; white-space: nowrap; }
+
+  /* ── Responsive ─────────────────────────────────────── */
+  @media (max-width: 960px) {
+    .app { grid-template-columns: 1fr; gap: 0; }
+    .brand small { display: none; }
+
+    .sidebar {
+      position: static;
+      max-height: none;
+      overflow: visible;
+      margin-bottom: 18px;
+    }
+    .side-label { margin-left: 2px; }
+    .cat-list, .flag-row {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 6px;
+      padding-bottom: 6px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--line2) transparent;
+    }
+    .cat-btn {
+      flex: none;
+      width: auto;
+      border: 1px solid var(--line);
+      background: var(--bg1);
+      border-radius: 999px;
+      padding: 5px 12px;
+    }
+    .cat-btn.active { border-color: var(--accent-line); }
+    .cat-btn.zero { display: none; }
   }
 
-  footer a { color: var(--cyan); text-decoration: none; }
-  footer a:hover { text-decoration: underline; }
-
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 980px) {
-    .hero { grid-template-columns: 1fr; }
-    .badge-wrap { order: -1; }
-    .stats { grid-template-columns: repeat(2, 1fr); }
-    .tool-grid { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 720px) {
+    .topbar-inner { flex-wrap: wrap; height: auto; padding: 10px 16px; row-gap: 8px; }
+    .topbar-search { order: 3; flex-basis: 100%; max-width: none; margin-left: 0; }
+    .brand small { display: none; }
+    .kbd-hint { display: none; }
+    .topbar-search input { padding-right: 12px; }
+    .masthead { padding: 28px 16px 20px; }
+    .app { padding: 0 16px 60px; }
+    .row { grid-template-columns: 1fr auto; }
+    .row-desc { display: none; }
+    .toolbar-right { margin-left: 0; flex-basis: 100%; }
+    select.lang-select { flex: 1; max-width: none; }
   }
 
-  @media (max-width: 640px) {
-    nav { padding: 0 1rem; }
-    .nav-links { display: none; }
-    header { padding: 120px 1rem 70px; }
-    main { padding: 0 1rem 80px; }
-    .tool-grid { grid-template-columns: 1fr; }
-    .section-head { flex-direction: column; align-items: flex-start; }
-    .search-row .btn { flex: 1 1 auto; }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+    html { scroll-behavior: auto; }
   }
 </style>
 </head>
 <body>
-<div class="grid-overlay"></div>
 
-<nav>
-  <div class="nav-inner">
-    <a class="brand" href="#top">
-      <span class="dot"></span>
+<nav class="topbar" aria-label="Main">
+  <div class="topbar-inner">
+    <a class="brand" href="#">
+      <span class="brand-mark" aria-hidden="true"></span>
       <span>THE WATCHTOWER</span>
+      <small>· Cardano devtools database</small>
     </a>
-    <div class="nav-links">
-      <a href="#directory">Directory</a>
-      <a href="#about">About</a>
-      <a class="cta" href="https://github.com/BEACNpool/cardano-devtools-directory" target="_blank" rel="noreferrer">GitHub</a>
+    <div class="topbar-search" role="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search 119 tools — name, language, org, anything…"
+             autocomplete="off" spellcheck="false" aria-label="Search the directory">
+      <span class="kbd-hint" aria-hidden="true">/</span>
+    </div>
+    <div class="topbar-links">
+      <a class="gh-link" href="https://github.com/BEACNpool/cardano-devtools-directory" target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
     </div>
   </div>
 </nav>
 
-<header id="top">
-  <div class="hero">
-    <div>
-      <h1>
-        Signal through the noise.
-        <span class="accent">The Watchtower</span>
-      </h1>
-      <p>
-        An AI-curated directory of Cardano developer tools.
-        Built by <strong>BEACNpool</strong> × <strong>OpenClaw</strong>.
-      </p>
-      <div class="sub">
-        Collapsible categories · Clickable repo cards
-      </div>
-    </div>
-
-    <div class="badge-wrap">
-      <div class="badge-glow"></div>
-      <img class="badge" src="docs/badge.png" alt="OpenClaw badge">
-      <div class="sub" style="margin-top:0.9rem; text-align:center; max-width:36ch;">
-        Joint project by <strong>BEACNpool</strong> × <strong>OpenClaw (AI)</strong>.
-        <br>
-        <span style="color: rgba(122,133,153,0.95)">Curated by AI to reduce editorial agenda; humans maintain the pipeline.</span>
-      </div>
-    </div>
+<header class="masthead">
+  <div>
+    <h1>Every Cardano developer tool.<br><span class="accent">One database.</span></h1>
+    <p class="tagline">
+      Nodes, SDKs, smart-contract languages, indexers, APIs, wallets — indexed and searchable.
+      Curated by <strong>BEACNpool</strong> × <strong>OpenClaw</strong>; maintained in the open.
+    </p>
+    <div class="stat-strip" id="stat-strip" aria-label="Directory statistics"></div>
   </div>
-
-  <div class="stats" aria-label="Quick stats">
-    <div class="stat">
-      <div class="k">Projects indexed</div>
-      <div class="v cyan" id="stat-projects">—</div>
-    </div>
-    <div class="stat">
-      <div class="k">Categories</div>
-      <div class="v" id="stat-cats">—</div>
-    </div>
-    <div class="stat">
-      <div class="k">Languages</div>
-      <div class="v amber" id="stat-langs">—</div>
-    </div>
-    <div class="stat">
-      <div class="k">Last build</div>
-      <div class="v" id="stat-updated">—</div>
-    </div>
-  </div>
+  <aside class="mast-side" id="mast-side" aria-label="Recently added tools"></aside>
 </header>
 
-<main id="directory">
-  <div class="section-head">
-    <h2>Directory</h2>
-    <p>
-      The full directory is here, but it shouldn’t hit you like a brick.
-      Start with Core Infrastructure and expand outward.
-    </p>
-  </div>
+<div class="app">
+  <aside class="sidebar" aria-label="Filters">
+    <div class="side-label">Categories</div>
+    <nav class="cat-list" id="cat-list" aria-label="Filter by category"></nav>
+    <div class="side-label">Highlights</div>
+    <div class="flag-row" id="flag-row"></div>
+  </aside>
 
-  <div class="controls" aria-label="Directory controls">
-    <div class="search-row">
-      <input id="search-input" class="search-input" type="search" placeholder="Search tools, orgs, languages, or descriptions…" aria-label="Search the Cardano developer tools directory" />
-      <button id="expand-all" class="btn" type="button">Expand all</button>
-      <button id="collapse-all" class="btn" type="button">Collapse all</button>
-      <button id="reset-filters" class="btn" type="button">Reset</button>
+  <section aria-label="Results" id="results-region">
+    <div class="toolbar">
+      <span class="result-count" id="result-count" role="status" aria-live="polite"></span>
+      <button class="clear-btn" id="clear-btn" type="button" hidden>Clear filters</button>
+      <div class="toolbar-right">
+        <select class="lang-select" id="lang-select" aria-label="Filter by language"></select>
+        <div class="view-toggle" role="group" aria-label="View">
+          <button id="view-grid" type="button" title="Grid view" aria-label="Grid view">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="1" y="1" width="6" height="6" rx="1.4"/><rect x="9" y="1" width="6" height="6" rx="1.4"/><rect x="1" y="9" width="6" height="6" rx="1.4"/><rect x="9" y="9" width="6" height="6" rx="1.4"/></svg>
+          </button>
+          <button id="view-list" type="button" title="List view" aria-label="List view">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="1" y="2" width="14" height="2.4" rx="1.2"/><rect x="1" y="6.8" width="14" height="2.4" rx="1.2"/><rect x="1" y="11.6" width="14" height="2.4" rx="1.2"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
-    <div id="category-chips" class="chip-row" aria-label="Filter by category"></div>
-    <div id="results-summary" class="helper-text">Loading directory…</div>
-  </div>
-
-  <div id="directory-root"></div>
-
-  <div class="section-head" id="about">
-    <h2>About</h2>
-    <p>
-      “The Watchtower” is BEACN’s lighthouse lens on the Cardano dev ecosystem.
-      OpenClaw scans, clusters, and curates; humans verify what matters.
-    </p>
-  </div>
-
-
-</main>
+    <div id="sections"></div>
+  </section>
+</div>
 
 <footer>
-  <div class="inner">
-    <div>
-      <strong>The Watchtower</strong> · BEACNpool × OpenClaw
+  <div class="footer-inner">
+    <div class="about">
+      <b>The Watchtower</b> is BEACN's lens on the Cardano dev ecosystem — OpenClaw (AI) scans and
+      clusters, humans verify. Missing a tool? Open a PR.
     </div>
-    <div>
+    <div class="footer-links">
       <a href="https://github.com/BEACNpool/cardano-devtools-directory" target="_blank" rel="noreferrer">Source</a>
-      ·
-      <a href="#top">Back to top</a>
+      <a href="https://github.com/BEACNpool/cardano-devtools-directory/blob/main/CONTRIBUTING.md" target="_blank" rel="noreferrer">Contribute</a>
+      <a href="https://beacnpool.github.io/" target="_blank" rel="noreferrer">BEACNpool</a>
     </div>
   </div>
 </footer>
 
+<noscript><div style="max-width:1280px;margin:0 auto;padding:20px;color:#939eb1">
+  This directory is rendered client-side and needs JavaScript. The raw data lives in
+  <a href="https://github.com/BEACNpool/cardano-devtools-directory">the repository</a>.
+</div></noscript>
+
 <script type="module">
-  import directory from "./docs/cardano-directory.js";
+import { TOOLS_DATA } from "./docs/cardano-directory.js";
 
-  const root = document.getElementById('directory-root');
-  const searchInput = document.getElementById('search-input');
-  const chipsRoot = document.getElementById('category-chips');
-  const resultsSummary = document.getElementById('results-summary');
-  const expandAllBtn = document.getElementById('expand-all');
-  const collapseAllBtn = document.getElementById('collapse-all');
-  const resetFiltersBtn = document.getElementById('reset-filters');
+/* ── Config ──────────────────────────────────────────── */
+const CATEGORY_ORDER = [
+  "Node Implementations", "CLI & Node Tooling", "Ledger & Formal Specs",
+  "Smart Contracts", "Off-Chain SDKs", "Indexers", "API Providers",
+  "Dev Environments", "Testing & Debugging", "Wallet Infra", "Explorers",
+  "Governance", "Scaling", "NFT & Tokens", "Oracles", "Enterprise",
+];
 
-  // category ordering: show Core Infrastructure first, then everything else
-  const preferredFirst = ["Core Infrastructure"];
+const LANG_COLORS = {
+  "haskell": "#8f6fc9", "rust": "#dea584", "typescript": "#3f9be0",
+  "javascript": "#f1e05a", "go": "#00add8", "python": "#4b8bbe",
+  "java": "#b07219", ".net": "#77c273", "scala": "#c22d40",
+  "purescript": "#9b7fd4", "swift": "#f05138", "bash": "#89e051",
+  "aiken": "#2dd4bf", "php": "#8892bf", "rust/aiken": "#dea584",
+  "vim script": "#199f4b", "emacs lisp": "#c065db",
+};
+const langColor = l => LANG_COLORS[String(l).toLowerCase()] || "#5c6779";
 
-  const categories = Object.keys(directory);
-  categories.sort((a,b) => {
-    const ai = preferredFirst.includes(a) ? 0 : 1;
-    const bi = preferredFirst.includes(b) ? 0 : 1;
-    if (ai !== bi) return ai - bi;
-    return a.localeCompare(b);
+/* ── State ───────────────────────────────────────────── */
+const state = { q: "", cat: "All", lang: "All", flag: "", view: localStorage.getItem("wt.view") || "grid" };
+
+// Restore from URL hash (#q=aiken&cat=Smart+Contracts&lang=Rust&flag=new)
+{
+  const p = new URLSearchParams(location.hash.slice(1));
+  if (p.get("q")) state.q = p.get("q");
+  if (p.get("cat")) state.cat = p.get("cat");
+  if (p.get("lang")) state.lang = p.get("lang");
+  if (p.get("flag")) state.flag = p.get("flag");
+}
+
+function syncHash() {
+  const p = new URLSearchParams();
+  if (state.q) p.set("q", state.q);
+  if (state.cat !== "All") p.set("cat", state.cat);
+  if (state.lang !== "All") p.set("lang", state.lang);
+  if (state.flag) p.set("flag", state.flag);
+  const h = p.toString();
+  history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
+}
+
+/* ── Data prep ───────────────────────────────────────── */
+const categories = [...new Set(TOOLS_DATA.map(t => t.category))]
+  .sort((a, b) => {
+    const ai = CATEGORY_ORDER.indexOf(a), bi = CATEGORY_ORDER.indexOf(b);
+    return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi) || a.localeCompare(b);
   });
 
-  // Build collapsible categories
-  const projectCount = Object.values(directory).reduce((sum, tools) => sum + tools.length, 0);
-  let visibleProjectCount = 0;
-  const langs = new Set();
-  let activeCategory = 'All';
-  let searchTerm = '';
+const langCounts = {};
+for (const t of TOOLS_DATA) langCounts[t.language] = (langCounts[t.language] || 0) + 1;
+const languages = Object.keys(langCounts).sort((a, b) => langCounts[b] - langCounts[a] || a.localeCompare(b));
 
-  function tagClass(t){
-    const s = String(t).toLowerCase();
-    if (s.includes('typescript') || s.includes('js')) return 'cyan';
-    if (s.includes('rust') || s.includes('haskell') || s.includes('plutus')) return 'amber';
-    return '';
+const orgs = new Set(TOOLS_DATA.map(t => t.org).filter(Boolean));
+const newCount = TOOLS_DATA.filter(t => t.new).length;
+const featCount = TOOLS_DATA.filter(t => t.featured).length;
+
+/* ── Matching ────────────────────────────────────────── */
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function tokens() { return state.q.toLowerCase().split(/\s+/).filter(Boolean); }
+
+function matchesSearch(t, toks) {
+  if (!toks.length) return true;
+  const hay = `${t.name} ${t.description} ${t.org} ${t.language} ${t.category}`.toLowerCase();
+  return toks.every(tok => hay.includes(tok));
+}
+const matchesLang = t => state.lang === "All" || t.language === state.lang;
+const matchesFlag = t => !state.flag || (state.flag === "new" ? !!t.new : !!t.featured);
+const matchesCat = t => state.cat === "All" || t.category === state.cat;
+
+function hl(text, toks) {
+  let out = esc(text);
+  if (!toks.length) return out;
+  for (const tok of toks) {
+    out = out.replace(new RegExp(`(${tok.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi"), "$1");
   }
+  return out.replaceAll("", "<mark>").replaceAll("", "</mark>");
+}
 
-  function card(tool){
-    (tool.languages || tool.lang || tool.tags || []).forEach?.(l => langs.add(String(l)));
+/* ── Renderers ───────────────────────────────────────── */
+const $ = id => document.getElementById(id);
+const externalIcon = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6.5 3.5H3.5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V9.5"/><path d="M9.5 2.5h4v4"/><path d="M13.5 2.5 7.5 8.5"/></svg>`;
 
-    const langTags = (tool.languages || tool.lang || tool.tags || []);
-    const tagsHtml = langTags.slice(0, 6).map(t => `<span class="tag ${tagClass(t)}">${t}</span>`).join('');
+function destLabel(url) {
+  try { const h = new URL(url).hostname; return h === "github.com" ? "repo" : h.replace(/^www\./, ""); }
+  catch { return "link"; }
+}
 
-    const links = [];
-    if (tool.repo) links.push(`<a href="${tool.repo}" target="_blank" rel="noreferrer">Repo</a>`);
-    if (tool.website) links.push(`<a href="${tool.website}" target="_blank" rel="noreferrer">Site</a>`);
-    if (tool.docs) links.push(`<a href="${tool.docs}" target="_blank" rel="noreferrer">Docs</a>`);
-
-    return `
-      <div class="card">
-        <h3>${tool.name || tool.title || 'Untitled'}</h3>
-        <p>${tool.description || tool.desc || ''}</p>
-        <div class="tags">${tagsHtml}</div>
-        <div class="links">${links.join(' · ')}</div>
+function cardHTML(t, toks) {
+  const badges =
+    (t.new ? `<span class="badge new">NEW</span>` : "") +
+    (t.featured ? `<span class="badge feat">FEATURED</span>` : "");
+  return `
+    <article class="card${t.featured ? " featured" : ""}">
+      <div class="card-meta">
+        <span class="card-org">${hl(t.org || "—", toks)}</span>
+        ${badges}
       </div>
-    `;
+      <h3 class="card-name"><a href="${esc(t.repo)}" target="_blank" rel="noreferrer">${hl(t.name, toks)}</a></h3>
+      <p class="card-desc">${hl(t.description, toks)}</p>
+      <div class="card-foot">
+        <span class="lang-dot" style="background:${langColor(t.language)}" aria-hidden="true"></span>
+        <span>${hl(t.language, toks)}</span>
+        <span class="dest">${esc(destLabel(t.repo))} ${externalIcon}</span>
+      </div>
+    </article>`;
+}
+
+function rowHTML(t, toks) {
+  const badges =
+    (t.new ? `<span class="badge new">NEW</span>` : "") +
+    (t.featured ? `<span class="badge feat">FEATURED</span>` : "");
+  return `
+    <div class="row">
+      <span class="row-name">
+        <a href="${esc(t.repo)}" target="_blank" rel="noreferrer">${hl(t.name, toks)}</a>
+        ${badges}
+      </span>
+      <span class="row-desc">${hl(t.description, toks)}</span>
+      <span class="row-side">
+        <span class="lang-dot" style="background:${langColor(t.language)}" aria-hidden="true"></span>
+        <span>${hl(t.language, toks)}</span><span>${esc(destLabel(t.repo))}</span>
+      </span>
+    </div>`;
+}
+
+const CONTRIBUTE_CARD = `
+  <a class="contribute" href="https://github.com/BEACNpool/cardano-devtools-directory/blob/main/CONTRIBUTING.md" target="_blank" rel="noreferrer">
+    <b>Your tool belongs here</b>
+    Building for Cardano? Add it to the database. <span>Open a PR →</span>
+  </a>`;
+
+function render() {
+  const toks = tokens();
+  const base = TOOLS_DATA.filter(t => matchesSearch(t, toks) && matchesLang(t) && matchesFlag(t));
+  const visible = base.filter(matchesCat);
+
+  // Sidebar categories with live counts
+  const catCounts = {};
+  for (const t of base) catCounts[t.category] = (catCounts[t.category] || 0) + 1;
+  $("cat-list").innerHTML = ["All", ...categories].map(cat => {
+    const n = cat === "All" ? base.length : (catCounts[cat] || 0);
+    return `<button class="cat-btn${state.cat === cat ? " active" : ""}${n === 0 ? " zero" : ""}"
+      data-cat="${esc(cat)}" type="button">${esc(cat)} <span class="n">${n}</span></button>`;
+  }).join("");
+
+  // Flags
+  $("flag-row").innerHTML = [
+    ["new", `Recently added`, newCount],
+    ["featured", `Featured picks`, featCount],
+  ].map(([f, label, n]) =>
+    `<button class="cat-btn${state.flag === f ? " active" : ""}" data-flag="${f}" type="button">${label} <span class="n">${n}</span></button>`
+  ).join("");
+
+  // Toolbar
+  const filters = [];
+  if (state.q) filters.push(`“${state.q}”`);
+  if (state.cat !== "All") filters.push(state.cat);
+  if (state.lang !== "All") filters.push(state.lang);
+  if (state.flag) filters.push(state.flag === "new" ? "recently added" : "featured");
+  $("result-count").innerHTML = filters.length
+    ? `<b>${visible.length}</b> of ${TOOLS_DATA.length} tools · ${esc(filters.join(" · "))}`
+    : `<b>${TOOLS_DATA.length}</b> tools across ${categories.length} categories`;
+  $("clear-btn").hidden = !filters.length;
+
+  // Sections
+  const container = $("sections");
+  if (!visible.length) {
+    container.innerHTML = `
+      <div class="empty">
+        <b>Nothing matches.</b><br>Try a broader term, or one of these:
+        <div class="hint-chips">
+          ${["wallet", "indexer", "Aiken", "Rust", "governance", "testing"].map(s =>
+            `<button class="hint-chip" data-try="${s}" type="button">${s}</button>`).join("")}
+        </div>
+      </div>`;
+    return;
   }
 
-  function matchesSearch(tool, term) {
-    if (!term) return true;
-    const haystack = [
-      tool.name,
-      tool.description,
-      tool.desc,
-      tool.org,
-      ...(tool.languages || tool.lang || tool.tags || [])
-    ].filter(Boolean).join(' ').toLowerCase();
-    return haystack.includes(term);
+  const groups = categories
+    .map(cat => [cat, visible.filter(t => t.category === cat)])
+    .filter(([, tools]) => tools.length);
+
+  const isGrid = state.view === "grid";
+  const noFilters = !filters.length;
+  container.innerHTML = groups.map(([cat, tools], gi) => `
+    <section class="cat-section">
+      <div class="cat-head"><h2>${esc(cat)}</h2><span class="n">${tools.length}</span></div>
+      ${isGrid
+        ? `<div class="grid">${tools.map(t => cardHTML(t, toks)).join("")}${noFilters && gi === groups.length - 1 ? CONTRIBUTE_CARD : ""}</div>`
+        : `<div class="rows">${tools.map(t => rowHTML(t, toks)).join("")}</div>`}
+    </section>`).join("");
+}
+
+function setView(v) {
+  state.view = v;
+  localStorage.setItem("wt.view", v);
+  $("view-grid").classList.toggle("active", v === "grid");
+  $("view-list").classList.toggle("active", v === "list");
+  render();
+}
+
+/* ── Static bits ─────────────────────────────────────── */
+$("stat-strip").innerHTML = [
+  [TOOLS_DATA.length, "tools"], [categories.length, "categories"],
+  [languages.length, "languages"], [orgs.size, "orgs"],
+].map(([n, l]) => `<span><b>${n}</b> ${l}</span>`).join("");
+
+{
+  const recent = TOOLS_DATA.filter(t => t.new).slice(-4).reverse();
+  $("mast-side").innerHTML = `
+    <div class="side-title">Recently added <button type="button" data-flag="new">all ${newCount} →</button></div>
+    ${recent.map(t => `
+      <div class="mast-item">
+        <a href="${esc(t.repo)}" target="_blank" rel="noreferrer">${esc(t.name)}</a>
+        <span class="o">${esc(t.org)} · ${esc(t.category)}</span>
+      </div>`).join("")}`;
+}
+
+$("lang-select").innerHTML =
+  `<option value="All">All languages (${languages.length})</option>` +
+  languages.map(l => `<option value="${esc(l)}"${state.lang === l ? " selected" : ""}>${esc(l)} (${langCounts[l]})</option>`).join("");
+
+$("q").value = state.q;
+$("q").placeholder = `Search ${TOOLS_DATA.length} tools — name, language, org, anything…`;
+
+/* ── Events ──────────────────────────────────────────── */
+$("q").addEventListener("input", e => { state.q = e.target.value.trim(); syncHash(); render(); });
+
+$("lang-select").addEventListener("change", e => { state.lang = e.target.value; syncHash(); render(); });
+
+document.addEventListener("click", e => {
+  const cat = e.target.closest("[data-cat]");
+  if (cat) { state.cat = cat.dataset.cat; syncHash(); render(); return; }
+  const flag = e.target.closest("[data-flag]");
+  if (flag) { state.flag = state.flag === flag.dataset.flag ? "" : flag.dataset.flag; syncHash(); render(); return; }
+  const hint = e.target.closest("[data-try]");
+  if (hint) { state.q = hint.dataset.try; $("q").value = state.q; syncHash(); render(); }
+});
+
+$("clear-btn").addEventListener("click", () => {
+  Object.assign(state, { q: "", cat: "All", lang: "All", flag: "" });
+  $("q").value = ""; $("lang-select").value = "All";
+  syncHash(); render();
+});
+
+$("view-grid").addEventListener("click", () => setView("grid"));
+$("view-list").addEventListener("click", () => setView("list"));
+
+document.addEventListener("keydown", e => {
+  if (e.key === "/" && !/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName)) {
+    e.preventDefault(); $("q").focus(); $("q").select();
   }
-
-  function renderDirectory() {
-    root.innerHTML = '';
-    visibleProjectCount = 0;
-
-    for (const cat of categories) {
-      const tools = directory[cat] || [];
-      const filteredTools = tools.filter(tool => {
-        const categoryOk = activeCategory === 'All' || activeCategory === cat;
-        return categoryOk && matchesSearch(tool, searchTerm);
-      });
-
-      if (filteredTools.length === 0) continue;
-
-      visibleProjectCount += filteredTools.length;
-      const open = cat === 'Core Infrastructure' || searchTerm.length > 0 || activeCategory !== 'All';
-
-      const html = `
-        <details ${open ? 'open' : ''}>
-          <summary>
-            <span class="summary-left">
-              <span class="chev"></span>
-              ${cat}
-            </span>
-            <span class="pill">${filteredTools.length}</span>
-          </summary>
-          <div class="panel">
-            <div class="tool-grid">
-              ${filteredTools.map(card).join('')}
-            </div>
-          </div>
-        </details>
-      `;
-
-      root.insertAdjacentHTML('beforeend', html);
-    }
-
-    if (visibleProjectCount === 0) {
-      root.innerHTML = '<p class="helper-text" style="padding:1.2rem 0;">No tools match your search yet. Try broader terms like “wallet”, “indexer”, or “Aiken”.</p>';
-    }
-
-    const activeLabel = activeCategory === 'All' ? 'all categories' : activeCategory;
-    resultsSummary.textContent = `Showing ${visibleProjectCount} of ${projectCount} tools in ${activeLabel}.`;
+  if (e.key === "Escape" && document.activeElement === $("q")) {
+    if (state.q) { state.q = ""; $("q").value = ""; syncHash(); render(); }
+    else $("q").blur();
   }
+});
 
-  function renderCategoryChips() {
-    const chips = ['All', ...categories].map(cat => {
-      const isActive = cat === activeCategory;
-      const count = cat === 'All' ? projectCount : (directory[cat] || []).length;
-      return `<button class="chip ${isActive ? 'active' : ''}" type="button" data-category="${cat}">${cat} (${count})</button>`;
-    }).join('');
-
-    chipsRoot.innerHTML = chips;
-  }
-
-  renderCategoryChips();
-  renderDirectory();
-
-  searchInput.addEventListener('input', (event) => {
-    searchTerm = event.target.value.trim().toLowerCase();
-    renderDirectory();
-  });
-
-  chipsRoot.addEventListener('click', (event) => {
-    const btn = event.target.closest('button[data-category]');
-    if (!btn) return;
-    activeCategory = btn.getAttribute('data-category');
-    renderCategoryChips();
-    renderDirectory();
-  });
-
-  expandAllBtn.addEventListener('click', () => {
-    root.querySelectorAll('details').forEach(el => { el.open = true; });
-  });
-
-  collapseAllBtn.addEventListener('click', () => {
-    root.querySelectorAll('details').forEach(el => { el.open = false; });
-  });
-
-  resetFiltersBtn.addEventListener('click', () => {
-    activeCategory = 'All';
-    searchTerm = '';
-    searchInput.value = '';
-    renderCategoryChips();
-    renderDirectory();
-  });
-
-  // Stats
-  document.getElementById('stat-projects').textContent = projectCount;
-  document.getElementById('stat-cats').textContent = categories.length;
-  document.getElementById('stat-langs').textContent = langs.size || '—';
-
-  // naive "last build" = today
-  const d = new Date();
-  document.getElementById('stat-updated').textContent = d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: '2-digit' });
+/* ── Init ────────────────────────────────────────────── */
+$("view-grid").classList.toggle("active", state.view === "grid");
+$("view-list").classList.toggle("active", state.view === "list");
+render();
 </script>
 </body>
 </html>
