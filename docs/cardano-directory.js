@@ -96,6 +96,7 @@ const TOOLS_DATA = [
   { name: "zed-aiken", category: "Dev Environments", language: "Rust", repo: "https://github.com/aiken-lang/zed-aiken", description: "Aiken language support for the Zed editor", org: "Aiken" },
   { name: "editor-integration-nvim", category: "Dev Environments", language: "Vim Script", repo: "https://github.com/aiken-lang/editor-integration-nvim", description: "Aiken language support for Vim and Neovim", org: "Aiken" },
   { name: "aiken-mode", category: "Dev Environments", language: "Emacs Lisp", repo: "https://github.com/aiken-lang/aiken-mode", description: "Aiken major mode for Emacs", org: "Aiken" },
+  { name: "eUTxO Fundamentals", category: "Dev Environments", language: "Aiken", repo: "https://github.com/elRaulito/eUTxO-Fundamentals-Building-Cardano-Smart-Contracts/blob/rendered/dark.pdf", description: "Open-source book covering the eUTxO model and building Cardano smart contracts with worked examples", org: "elRaulito", capabilities: ["Learn Cardano", "Write smart contracts"], level: "Beginner friendly", new: true },
 
   // Governance
   { name: "GovTool", category: "Governance", language: "TypeScript", repo: "https://github.com/IntersectMBO/govtool", description: "DRep registration, delegation, and governance action voting", org: "IntersectMBO" },
